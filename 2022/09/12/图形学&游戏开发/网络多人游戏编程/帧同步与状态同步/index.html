@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="图片来源：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;105390563 帧同步又叫“锁步模式”。这种模式用形象的比喻来说，就是把所有参与对战的客户端，看成是排成一列的囚犯。这些囚犯们的左脚都被链子所在一起，因此他们如果要往前走，就只能同时迈步，如果其中某个人走快了，或者走慢了，都会让整队人停下来。 作者：合肥黑链接：https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;810508">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E7%BD%91%E7%BB%9C%E5%A4%9A%E4%BA%BA%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B/%E5%B8%A7%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="图片来源：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;105390563 帧同步又叫“锁步模式”。这种模式用形象的比喻来说，就是把所有参与对战的客户端，看成是排成一列的囚犯。这些囚犯们的左脚都被链子所在一起，因此他们如果要往前走，就只能同时迈步，如果其中某个人走快了，或者走慢了，都会让整队人停下来。 作者：合肥黑链接：https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;810508">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/v2-1eaef9fbb1768e716b146b0a2a4e1a41_r.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220505085138953.png">
+<meta property="article:published_time" content="2022-09-12T01:41:00.691Z">
+<meta property="article:modified_time" content="2022-09-12T01:41:00.691Z">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/v2-1eaef9fbb1768e716b146b0a2a4e1a41_r.jpg">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-图形学&amp;游戏开发/网络多人游戏编程/帧同步与状态同步" class="post-图形学&amp;游戏开发/网络多人游戏编程/帧同步与状态同步 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E7%BD%91%E7%BB%9C%E5%A4%9A%E4%BA%BA%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B/%E5%B8%A7%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5/" data-id="cl829min60027ssv50bvwb638" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/v2-1eaef9fbb1768e716b146b0a2a4e1a41_r.jpg" alt="preview"></p>
+<p>图片来源：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/105390563">https://zhuanlan.zhihu.com/p/105390563</a></p>
+<p>帧同步又叫“锁步模式”。这种模式用形象的比喻来说，就是把所有参与对战的客户端，看成是排成一列的囚犯。这些囚犯们的左脚都被链子所在一起，因此他们如果要往前走，就只能同时迈步，如果其中某个人走快了，或者走慢了，都会让整队人停下来。</p>
+<p>作者：合肥黑<br>链接：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/81050871cce7">https://www.jianshu.com/p/81050871cce7</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<p>帧同步要求每一帧都是一样的，而状态同步允许每个客户端屏幕上显示的内容不一样，只需要最后在逻辑上统一</p>
+<p>帧同步的优缺点：</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发效率高<br />打击感强<br />流量低<br />回放实现简单</td>
+<td>网络要求高<br />反外挂能力弱<br />断线重连的时间长<br /></td>
+</tr>
+</tbody></table>
+<p>状态同步的优缺点：</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>安全性高<br />网络要求宽松<br />断线重连快<br /></td>
+<td>开发效率低<br />打击感差<br />网络流量复杂</td>
+</tr>
+</tbody></table>
+<h2 id="1-帧同步"><a href="#1-帧同步" class="headerlink" title="1. 帧同步"></a>1. 帧同步</h2><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220505085138953.png" alt="image-20220505085138953"></p>
+<p><code>Server</code>将逻辑时间切分为一个个等长的逻辑时间片，每一个时间片对应一个<code>Frame</code>，每个<code>Frame</code>有一个代表逻辑时间的序号。<code>Client</code>的输入模块在接收到玩家输入的命令（<code>Cmd</code>）后，并不直接将<code>Cmd</code>直接传给游戏逻辑，而是发送给<code>Server</code>。如果<code>Server</code>在同一个时间片（比如<code>Frame3</code>）的周期里，收到了<code>Client A</code>和<code>Client B</code>的输入，那么就会将这两个<code>Client</code>的输入以<code>Cmd</code>列表的形式包含在<code>Frame 3</code>里。等到<code>Frame 3</code>的周期结束时，就会将<code>Frame 3</code>分别发送给<code>Client A</code>和<code>Client B</code>。那么，两个<code>Client</code>在相同的逻辑时间里，就会收到完全相同的<code>Cmd</code>列表。</p>
+<p>如果<code>Client A</code>与<code>Client B</code>的逻辑也完全相同，那么对于完全相同的<code>Cmd</code>输入，理论上，将会计算得出完全相同的逻辑结果，从而实现了高一致性的网络同步</p>
+<p>一个客户端做出操作，发送操作指令给服务器，服务器将这个<u>操作指令再广播</u>到其他客户端，其他客户端本地的逻辑层计算出结果，表现层根据逻辑层计算的结果刷新状态</p>
+<p>帧同步的优点：</p>
+<ul>
+<li><p>容易实现回放系统，客户端向服务器申请重新执行一遍操作指令</p>
+</li>
+<li><p>逻辑表现分离</p>
+</li>
+<li><p>服务器转发的是操作指令，数据量小</p>
+</li>
+</ul>
+<h3 id="1-1-延迟和卡顿"><a href="#1-1-延迟和卡顿" class="headerlink" title="1.1 延迟和卡顿"></a>1.1 延迟和卡顿</h3><p>这俩是一个tradeoff，一个好了另一个差了，比如延迟很低的情况下，严格按照逻辑计算结果进行表现，每帧就会出现不连贯的情况。</p>
+<p>解决办法：缓冲，积累两、三帧的数据，然后一块播放</p>
+<h4 id="1-1-1-帧锁定"><a href="#1-1-1-帧锁定" class="headerlink" title="1.1.1. 帧锁定"></a>1.1.1. 帧锁定</h4><h4 id="1-1-2-预测、快照、回滚"><a href="#1-1-2-预测、快照、回滚" class="headerlink" title="1.1.2 预测、快照、回滚"></a>1.1.2 预测、快照、回滚</h4><h5 id="1-1-2-1-预测"><a href="#1-1-2-1-预测" class="headerlink" title="1.1.2.1 预测"></a>1.1.2.1 预测</h5><p>一般情况下，客户端将自己的输入指令发送给服务器，服务器会收集所有的客户端上传的操作指令，然后再一起广播给所有客户端。</p>
+<p>在某一帧，客户端A将自己的输入指令发送给服务器后，A预测自己的指令是有效的，预先执行自己的输入指令（逻辑计算-&gt;渲染），客户端不需要服务端确认帧返回才执行指令，而其他玩家的输入也可以预测（例如按照其上一个输入做预测）</p>
+<blockquote>
+<p>真实逻辑的预测执行和view层面的预测执行</p>
+</blockquote>
+<h5 id="1-1-2-2-快照"><a href="#1-1-2-2-快照" class="headerlink" title="1.1.2.2 快照"></a>1.1.2.2 快照</h5><p>客户端会保存服务端最后一次成功确认的帧和预测帧的数据和状态，方便后面回滚</p>
+<h5 id="1-1-2-3-回滚"><a href="#1-1-2-3-回滚" class="headerlink" title="1.1.2.3 回滚"></a>1.1.2.3 回滚</h5><p>收到服务器的确认操作之后，如果确认操作和之前预测的操作一样，则万事大吉，不做任何改变；否则，客户端就需要回滚到最后一次服务器确认的正确帧，然后在执行<strong>追帧</strong>操作（从正确帧开始，快速执行中间的帧，直至最新的帧）</p>
+<h3 id="1-2-逻辑表现分离"><a href="#1-2-逻辑表现分离" class="headerlink" title="1.2 逻辑表现分离"></a>1.2 逻辑表现分离</h3><p>why？</p>
+<p>有效解决“卡顿”现象，对于由延迟引发的卡顿，逻辑不平滑，但可以在逻辑值之间进行插值，让表现平滑。逻辑空间严格按照帧同步的要求进行计算，表现空间获得逻辑计算的结果进行显示，并利用插值来平滑显示效果</p>
+<p>how？</p>
+<p>将一个游戏对象类拆分为两个类，分别为逻辑类和表现类</p>
+<p>逻辑类严格按照帧同步的要求进行计算（比如碰撞啊技能释放啊都是在这里，<u>不能用浮点数</u>），表现类就是<code>gameObject</code>的位置啊、动画等信息。逻辑对象和表现对象都有自己的ID，然后各自持有对方的引用，表现层就可以通过引用来获取逻辑层的计算结果</p>
+<h3 id="1-3-安全性（外挂）"><a href="#1-3-安全性（外挂）" class="headerlink" title="1.3 安全性（外挂）"></a>1.3 安全性（外挂）</h3><p>帧同步的逻辑计算是放在客户端的，所以客户端一旦被破解，就可以很容易地获得数据，开发外挂</p>
+<h3 id="1-4-避免使用浮点数"><a href="#1-4-避免使用浮点数" class="headerlink" title="1.4 避免使用浮点数"></a>1.4 避免使用浮点数</h3><p>帧同步技术的难点之一就是需要客户端计算结果的一致性。其中浮点数的运算在一些情况下是会产生不同的结果，所以实现帧同步要避免使用浮点数</p>
+<h3 id="1-5-使用UDP"><a href="#1-5-使用UDP" class="headerlink" title="1.5 使用UDP"></a>1.5 使用UDP</h3><p>在UDP之上实现了可靠性，增加序号和确认机制</p>
+<ol>
+<li>为每个数据包增加序列号，每发一次，增加本地序号</li>
+<li>每次收到包，把收到的包上序列号变为确认字符，发送包的时候带上这些确认字符</li>
+</ol>
+<h2 id="2-状态同步"><a href="#2-状态同步" class="headerlink" title="2. 状态同步"></a>2. 状态同步</h2><p>一个客户端发出操作指令给服务器，<u>服务器计算出结果</u>，更新状态，再将游戏中的所有<u>状态广播</u>给其他客户端</p>
+<blockquote>
+<p>逻辑计算在服务端，逻辑计算包括普攻、属性、移动、AI、碰撞、技能逻辑</p>
+</blockquote>
+<ul>
+<li>安全性高</li>
+<li>断线重连容易，服务器再传一次数据就行了</li>
+</ul>
+<p>为什么不能用浮点数（float）？因为要保证计算结果一致</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/105390563">https://zhuanlan.zhihu.com/p/105390563</a></p>
+<p><a target="_blank" rel="noopener" href="https://jonyzhao.gitbooks.io/gamedev/content/Network/FrameLockStepSync.html">https://jonyzhao.gitbooks.io/gamedev/content/Network/FrameLockStepSync.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/36884005">https://zhuanlan.zhihu.com/p/36884005</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/323505671">https://www.zhihu.com/question/323505671</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youxituoluo.com/528021.html">https://www.youxituoluo.com/528021.html</a></p>
+<p><a target="_blank" rel="noopener" href="http://codebear.fun/index.php/2020/04/02/548.html">http://codebear.fun/index.php/2020/04/02/548.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8cca5458c45b">https://www.jianshu.com/p/8cca5458c45b</a></p>
+<p><a target="_blank" rel="noopener" href="http://bindog.github.io/blog/2015/03/10/synchronization-in-multiplayer-networked-game-lockstep/">http://bindog.github.io/blog/2015/03/10/synchronization-in-multiplayer-networked-game-lockstep/</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E7%BD%91%E7%BB%9C%E5%A4%9A%E4%BA%BA%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B/%E5%B8%A7%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5/">
+    <time datetime="2022-09-12T01:41:00.691Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86%E5%8D%9A%E5%AE%A2%E7%AC%94%E8%AE%B0/%E4%B8%89%E3%80%81%E8%83%8C%E9%9D%A2%E5%89%94%E9%99%A4/" rel="prev"><span class="meta-nav">←</span> (no title)</a></span>
+    
+    
+        <span class="nav-next"><a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%A6%82%E4%BD%95%E5%87%8F%E5%B0%91DrawCall%EF%BC%9F/" rel="next">(no title) <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

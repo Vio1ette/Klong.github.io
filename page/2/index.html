@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="再勇敢一点，再自信一点">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/page/2/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="再勇敢一点，再自信一点">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main">
+  
+    <article id="post-图形学&amp;游戏开发/透明效果（alpha测试，alpha混合）" class="post-图形学&amp;游戏开发/透明效果（alpha测试，alpha混合） post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C%EF%BC%88alpha%E6%B5%8B%E8%AF%95%EF%BC%8Calpha%E6%B7%B7%E5%90%88%EF%BC%89/" data-id="cl829mimn000zssv55tvo6iz3" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>透明效果</p>
+<p>参考资料：Unity Shader入门精要第8章</p>
+<p>Unity中的alpha测试函数：clip，alpha混合命令：Blend</p>
+<h3 id="1-alpha测试"><a href="#1-alpha测试" class="headerlink" title="1. alpha测试"></a>1. alpha测试</h3><p>alpha测试比较简单‘粗糙，它判断像素的alpha通道是否满足条件（小于某个阈值），如果是，就不对这个物体进行渲染，否则就正常渲染。这种方式没法实现半透明的效果，所以alpha混合用的多一些。</p>
+<h3 id="2-alpha混合"><a href="#2-alpha混合" class="headerlink" title="2. alpha混合"></a>2. alpha混合</h3><h4 id="2-1-取消z-write"><a href="#2-1-取消z-write" class="headerlink" title="2.1 取消z-write"></a>2.1 取消z-write</h4><p>为了实现半透明效果，即能透过半透明物体看到后面的不透明物体（半透明物体离摄像机更近），必须取消半透明物体的深度写入，否则进行深度测试之后，将判定半透明物体遮挡住后面的不透明物体，后面的不透明物体就无法渲染</p>
+<blockquote>
+<p> 如果开启了深度写入，深度缓冲里保存的就是半透明物体的深度，按道理来讲，颜色缓冲应该和深度缓冲对应，即应该保存半透明物体的颜色，但这样就没办法看到后面的不透明物体的颜色了。所以关闭半透明物体的深度写入功能，即半透明物体对深度缓冲是只读的</p>
+</blockquote>
+<h4 id="2-2-注意渲染顺序的重要性"><a href="#2-2-注意渲染顺序的重要性" class="headerlink" title="2.2 注意渲染顺序的重要性"></a>2.2 注意渲染顺序的重要性</h4><h5 id="2-2-1-半透明物体和不透明物体"><a href="#2-2-1-半透明物体和不透明物体" class="headerlink" title="2.2.1 半透明物体和不透明物体"></a>2.2.1 半透明物体和不透明物体</h5><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/0CD49E095BA9CD240B3603CD9F463AA0.png" alt="0CD49E095BA9CD240B3603CD9F463AA0"></p>
+<p>在已经取消z-write的情况下，如果先渲染A，没有深度写入，将A的颜色写入颜色缓冲区。在渲染B时，深度写入被打开，此时B会发现自己的深度是最近的（深度缓冲区为空），所以它的颜色会直接写入帧缓冲区，将会覆盖A的颜色，得到了错误的效果。</p>
+<p><u>所以要先渲染不透明物体，再渲染半透明物体</u></p>
+<p>B正常渲染，渲染A时，进行正常的深度测试，判断出A更近，将A的alpha通道的值和颜色缓冲区的值（B的颜色）进行混合（具体实现细节还需要查资料），最终正确实现半透明效果。</p>
+<h5 id="2-2-2-半透明物体和半透明物体"><a href="#2-2-2-半透明物体和半透明物体" class="headerlink" title="2.2.2 半透明物体和半透明物体"></a>2.2.2 半透明物体和半透明物体</h5><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/C590C84FA1ED2D7BD42EC4EC2BA0EA48.png" alt="C590C84FA1ED2D7BD42EC4EC2BA0EA48"></p>
+<p>先渲染B，将B的颜色写入颜色缓冲区，但不进行深度写入，再渲染A，进行深度测试判断A更近，将A和颜色缓冲区的B的颜色混合，得到正确的透明效果。由于没有深度写入，先渲染A再渲染B将会得到一个错误的半透明效果（看起来B是在A的前面）</p>
+<p><u>所以要先渲染远处的半透明物体，再渲染近的半透明物体</u></p>
+<h3 id="3-渲染引擎的一般处理方法"><a href="#3-渲染引擎的一般处理方法" class="headerlink" title="3. 渲染引擎的一般处理方法"></a>3. 渲染引擎的一般处理方法</h3><ol>
+<li>正常渲染所有不透明物体</li>
+<li>将半透明物体按离摄像机的远近排序，先渲染远的，再渲染近的</li>
+</ol>
+<p>问题：深度缓冲中的值是像素级别的，对物体进行排序时不能依赖像素级别的深度值。难以排序的情况：物体互相重叠，</p>
+<p>解决方案：分割网格、模型拆解</p>
+<h3 id="4-开启深度写入的半透明效果"><a href="#4-开启深度写入的半透明效果" class="headerlink" title="4. 开启深度写入的半透明效果"></a>4. 开启深度写入的半透明效果</h3><p>两个Pass</p>
+<p>第一个Pass：开启深度写入，单纯记录深度，但不输出颜色</p>
+<p>第二个Pass：依据像素级深度值排序结果进行透明度混合</p>
+<p>以前的方法要得到半透明物体的排序结果，现在进行像素级排序，而非整个物体</p>
+<h3 id="5-半透明物体的阴影"><a href="#5-半透明物体的阴影" class="headerlink" title="5. 半透明物体的阴影"></a>5. 半透明物体的阴影</h3>
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E9%80%8F%E6%98%8E%E6%95%88%E6%9E%9C%EF%BC%88alpha%E6%B5%8B%E8%AF%95%EF%BC%8Calpha%E6%B7%B7%E5%90%88%EF%BC%89/">
+    <time datetime="2022-09-12T01:41:00.691Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/游戏编程模式/单例模式" class="post-图形学&amp;游戏开发/游戏编程模式/单例模式 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" data-id="cl829min20020ssv5d7549hdd" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>单例模式</p>
+<p>限制其类实例只能有一个，对外提供一个该对象的全局访问点</p>
+<p>why？</p>
+<p>对一些类来说，确保只有一个实例是很重要的，比如打印机、文件系统、日志记录。</p>
+<p>what？</p>
+<p>让类自身来管理它自己的唯一的实例，并提供一个访问该实例的静态方法。</p>
+<p>how？</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+    <time datetime="2022-09-12T01:41:00.691Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/游戏编程模式/观察者模式" class="post-图形学&amp;游戏开发/游戏编程模式/观察者模式 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/" data-id="cl829min50023ssv595l69k6d" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>观察者模式</p>
+<p>在对象间定义一种一对多的依赖关系，以便当某对象的状态改变时，与它存在依赖关系的所有对象都能受到通知并自动进行更新</p>
+<p>why？</p>
+<p>考虑观察者模式的典型应用场景：游戏中的成就系统</p>
+<p>游戏角色从桥上掉下去，可以解锁“从桥上掉下”成就，判断角色是否从桥上掉下去，是物理引擎要做的事情，而为了实现成就系统，是否意味着要在物理引擎的代码部分添加解锁成就相关的逻辑？这看起来十分不优美</p>
+<p>如何<strong>解耦</strong>成就系统与物理引擎代码部分？</p>
+<blockquote>
+<p>成就在游戏的不同层面被触发，怎么解耦成就系统和其他部分</p>
+</blockquote>
+<p>观察者模式可以很好地解决这个问题。成就系统注册它本身为观察者，这样当物理系统发出一个通知时，成就系统就会收到通知。然后它会检查这个掉落的物体是否是“主角”，并检查它是否是从桥上掉下去的。如果条件都满足，就会触发成就系统并放射礼花，吹响号角，且这些判断、表现的代码是与物理系统完全解耦。</p>
+<p>what？</p>
+<p>在对象间定义一种一对多的依赖关系，以便当某对象的状态改变时，与它存在依赖关系的所有对象都能受到通知并自动进行更新</p>
+<p>how?</p>
+<p>举个例子，有物理代码处理重力，追踪哪些物体待在地表，哪些坠入深渊。 为了实现“桥上掉落”的徽章，我们可以直接把成就代码放在那里，但那就会一团糟。 相反，可以这样做：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Physics::updateEntity</span><span class="params">(Entity&amp; entity)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">bool</span> wasOnSurface = entity.<span class="built_in">isOnSurface</span>();</span><br><span class="line">  entity.<span class="built_in">accelerate</span>(GRAVITY);</span><br><span class="line">  entity.<span class="built_in">update</span>();</span><br><span class="line">  <span class="keyword">if</span> (wasOnSurface &amp;&amp; !entity.<span class="built_in">isOnSurface</span>()) <span class="comment">//掉下桥</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="built_in">notify</span>(entity, EVENT_START_FALL);  <span class="comment">//通知</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样看起来很简洁</p>
+<p>成就系统注册它自己为观察者，</p>
+<h4 id="观察者"><a href="#观察者" class="headerlink" title="观察者"></a>观察者</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observer</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="keyword">virtual</span> ~<span class="built_in">Observer</span>() &#123;&#125;</span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">onNotify</span><span class="params">(<span class="keyword">const</span> Entity&amp; entity, Event event)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这是个抽象基类，任何派生了Observer的类都成为了观察者，对于成就系统：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Achievements</span> :</span> <span class="keyword">public</span> Observer</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">onNotify</span><span class="params">(<span class="keyword">const</span> Entity&amp; entity, Event event)</span> <span class="comment">//实现onNotify</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="built_in"><span class="keyword">switch</span></span> (event)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> EVENT_ENTITY_FELL:</span><br><span class="line">      <span class="keyword">if</span> (entity.<span class="built_in">isHero</span>() &amp;&amp; heroIsOnBridge_)</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="built_in">unlock</span>(ACHIEVEMENT_FELL_OFF_BRIDGE);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 处理其他事件，更新heroIsOnBridge_变量……</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">unlock</span><span class="params">(Achievement achievement)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="comment">// 如果还没有解锁，那就解锁成就……</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">bool</span> heroIsOnBridge_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="被观察者"><a href="#被观察者" class="headerlink" title="被观察者"></a>被观察者</h4><p>被观察者有发送通知的函数，还维护了一个<u>观察者列表</u>，而非只支持单一观察者，列表中的所有观察者都可以接收到通知</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Subject</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  Observer* observers_[MAX_OBSERVERS];</span><br><span class="line">  <span class="keyword">int</span> numObservers_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>被观察者提供了公开的API来对列表进行修改，这就允许了外界代码控制了谁接收通知</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Subject</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">addObserver</span><span class="params">(Observer* observer)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="comment">// 添加到数组中……</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">removeObserver</span><span class="params">(Observer* observer)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="comment">// 从数组中移除……</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 其他代码……</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>被观察者发送通知：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Subject</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">notify</span><span class="params">(<span class="keyword">const</span> Entity&amp; entity, Event event)</span> <span class="comment">//注意notify是protected的，意味着派生了可以访问，而外部代码不能访问</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numObservers_; i++)</span><br><span class="line">    &#123;</span><br><span class="line">      observers_[i]-&gt;<span class="built_in">onNotify</span>(entity, event);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 其他代码…………</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="可被观察的物理引擎"><a href="#可被观察的物理引擎" class="headerlink" title="可被观察的物理引擎"></a>可被观察的物理引擎</h4><p>物理引擎派生被观察者类，可以在有趣的时间点发出通知</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Physics</span> :</span> <span class="keyword">public</span> Subject</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">updateEntity</span><span class="params">(Entity&amp; entity)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/">
+    <time datetime="2022-09-12T01:41:00.691Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/游戏编程模式/对象池" class="post-图形学&amp;游戏开发/游戏编程模式/对象池 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/%E5%AF%B9%E8%B1%A1%E6%B1%A0/" data-id="cl829min50024ssv57ke798jh" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>对象池</p>
+<p>why？</p>
+<p>粒子系统短时间内要创建销毁大量对象，如果不用对象池，就会很麻烦，而且还会产生内存碎片。利用对象池可以重用对象，避免频繁创建销毁对象，提高性能</p>
+<p>how：</p>
+<p>定义一个池对象，其中包含一组可重用对象，每个可重用对象都可以查询使用状态</p>
+<p>应用场景：</p>
+<ul>
+<li>需要频繁创建销毁对象</li>
+<li>对象大小差不多</li>
+<li>在堆上进行内存分配缓慢且会导致内存碎片</li>
+<li></li>
+</ul>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%BC%8F/%E5%AF%B9%E8%B1%A1%E6%B1%A0/">
+    <time datetime="2022-09-12T01:41:00.691Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/游戏场景管理博客笔记/三、背面剔除" class="post-图形学&amp;游戏开发/游戏场景管理博客笔记/三、背面剔除 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86%E5%8D%9A%E5%AE%A2%E7%AC%94%E8%AE%B0/%E4%B8%89%E3%80%81%E8%83%8C%E9%9D%A2%E5%89%94%E9%99%A4/" data-id="cl829min50025ssv5g7sn1d9t" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <blockquote>
+<p>软（件）光栅器，一般是指运行在CPU上的光栅化器程序。而硬件光栅化器专指依赖于GPU的光栅化器，例如OpenGL、Vulkan之类的图形库</p>
+</blockquote>
+<p>背面剔除，字面意思理解就是背朝着照相机的面看不到，不进行渲染，提高渲染速度</p>
+<p>首先要判断图元到底是正向还是背向</p>
+<h4 id="软光栅化的背面剔除"><a href="#软光栅化的背面剔除" class="headerlink" title="软光栅化的背面剔除"></a>软光栅化的背面剔除</h4><p>软光栅化的背面剔除通常在<u>世界空间或相机空间</u>进行，依据面法向量和视线向量的夹角（快速算向量的夹角用点乘）大小来判断面是正向还是背向</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220420210746650.png" alt="image-20220420210746650"></p>
+<blockquote>
+<p>即使背面剔除通过，也有可能因为不在视锥体中而不被渲染</p>
+</blockquote>
+<h4 id="现代GPU中的背景剔除"><a href="#现代GPU中的背景剔除" class="headerlink" title="现代GPU中的背景剔除"></a>现代GPU中的背景剔除</h4><p><u>发生在顶点变换（MVP）之后，光栅化之前，即在屏幕空间中</u>。</p>
+<p>为什么不在顶点变换时做？</p>
+<p>因为顶点变换阶段GPU只有一个个顶点的信息，还没有图元的信息，所以做不了背面剔除（要有面，就得先有图元）。光栅化阶段的输入是屏幕空间中图元数据（x, y, depth）</p>
+<p>在屏幕空间中如何确定图元的朝向？</p>
+<p>根据<u>顶点绕序</u>，DirectX默认情况下顺时针绕序是正面，逆时针绕序是反面，可以通过改变渲染状态来颠倒这个规则。</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220420210725116.png" alt="image-20220420210725116"></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E6%B8%B8%E6%88%8F%E5%9C%BA%E6%99%AF%E7%AE%A1%E7%90%86%E5%8D%9A%E5%AE%A2%E7%AC%94%E8%AE%B0/%E4%B8%89%E3%80%81%E8%83%8C%E9%9D%A2%E5%89%94%E9%99%A4/">
+    <time datetime="2022-09-12T01:41:00.691Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/网络多人游戏编程/帧同步与状态同步" class="post-图形学&amp;游戏开发/网络多人游戏编程/帧同步与状态同步 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E7%BD%91%E7%BB%9C%E5%A4%9A%E4%BA%BA%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B/%E5%B8%A7%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5/" data-id="cl829min60027ssv50bvwb638" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/v2-1eaef9fbb1768e716b146b0a2a4e1a41_r.jpg" alt="preview"></p>
+<p>图片来源：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/105390563">https://zhuanlan.zhihu.com/p/105390563</a></p>
+<p>帧同步又叫“锁步模式”。这种模式用形象的比喻来说，就是把所有参与对战的客户端，看成是排成一列的囚犯。这些囚犯们的左脚都被链子所在一起，因此他们如果要往前走，就只能同时迈步，如果其中某个人走快了，或者走慢了，都会让整队人停下来。</p>
+<p>作者：合肥黑<br>链接：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/81050871cce7">https://www.jianshu.com/p/81050871cce7</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<p>帧同步要求每一帧都是一样的，而状态同步允许每个客户端屏幕上显示的内容不一样，只需要最后在逻辑上统一</p>
+<p>帧同步的优缺点：</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发效率高<br />打击感强<br />流量低<br />回放实现简单</td>
+<td>网络要求高<br />反外挂能力弱<br />断线重连的时间长<br /></td>
+</tr>
+</tbody></table>
+<p>状态同步的优缺点：</p>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>安全性高<br />网络要求宽松<br />断线重连快<br /></td>
+<td>开发效率低<br />打击感差<br />网络流量复杂</td>
+</tr>
+</tbody></table>
+<h2 id="1-帧同步"><a href="#1-帧同步" class="headerlink" title="1. 帧同步"></a>1. 帧同步</h2><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220505085138953.png" alt="image-20220505085138953"></p>
+<p><code>Server</code>将逻辑时间切分为一个个等长的逻辑时间片，每一个时间片对应一个<code>Frame</code>，每个<code>Frame</code>有一个代表逻辑时间的序号。<code>Client</code>的输入模块在接收到玩家输入的命令（<code>Cmd</code>）后，并不直接将<code>Cmd</code>直接传给游戏逻辑，而是发送给<code>Server</code>。如果<code>Server</code>在同一个时间片（比如<code>Frame3</code>）的周期里，收到了<code>Client A</code>和<code>Client B</code>的输入，那么就会将这两个<code>Client</code>的输入以<code>Cmd</code>列表的形式包含在<code>Frame 3</code>里。等到<code>Frame 3</code>的周期结束时，就会将<code>Frame 3</code>分别发送给<code>Client A</code>和<code>Client B</code>。那么，两个<code>Client</code>在相同的逻辑时间里，就会收到完全相同的<code>Cmd</code>列表。</p>
+<p>如果<code>Client A</code>与<code>Client B</code>的逻辑也完全相同，那么对于完全相同的<code>Cmd</code>输入，理论上，将会计算得出完全相同的逻辑结果，从而实现了高一致性的网络同步</p>
+<p>一个客户端做出操作，发送操作指令给服务器，服务器将这个<u>操作指令再广播</u>到其他客户端，其他客户端本地的逻辑层计算出结果，表现层根据逻辑层计算的结果刷新状态</p>
+<p>帧同步的优点：</p>
+<ul>
+<li><p>容易实现回放系统，客户端向服务器申请重新执行一遍操作指令</p>
+</li>
+<li><p>逻辑表现分离</p>
+</li>
+<li><p>服务器转发的是操作指令，数据量小</p>
+</li>
+</ul>
+<h3 id="1-1-延迟和卡顿"><a href="#1-1-延迟和卡顿" class="headerlink" title="1.1 延迟和卡顿"></a>1.1 延迟和卡顿</h3><p>这俩是一个tradeoff，一个好了另一个差了，比如延迟很低的情况下，严格按照逻辑计算结果进行表现，每帧就会出现不连贯的情况。</p>
+<p>解决办法：缓冲，积累两、三帧的数据，然后一块播放</p>
+<h4 id="1-1-1-帧锁定"><a href="#1-1-1-帧锁定" class="headerlink" title="1.1.1. 帧锁定"></a>1.1.1. 帧锁定</h4><h4 id="1-1-2-预测、快照、回滚"><a href="#1-1-2-预测、快照、回滚" class="headerlink" title="1.1.2 预测、快照、回滚"></a>1.1.2 预测、快照、回滚</h4><h5 id="1-1-2-1-预测"><a href="#1-1-2-1-预测" class="headerlink" title="1.1.2.1 预测"></a>1.1.2.1 预测</h5><p>一般情况下，客户端将自己的输入指令发送给服务器，服务器会收集所有的客户端上传的操作指令，然后再一起广播给所有客户端。</p>
+<p>在某一帧，客户端A将自己的输入指令发送给服务器后，A预测自己的指令是有效的，预先执行自己的输入指令（逻辑计算-&gt;渲染），客户端不需要服务端确认帧返回才执行指令，而其他玩家的输入也可以预测（例如按照其上一个输入做预测）</p>
+<blockquote>
+<p>真实逻辑的预测执行和view层面的预测执行</p>
+</blockquote>
+<h5 id="1-1-2-2-快照"><a href="#1-1-2-2-快照" class="headerlink" title="1.1.2.2 快照"></a>1.1.2.2 快照</h5><p>客户端会保存服务端最后一次成功确认的帧和预测帧的数据和状态，方便后面回滚</p>
+<h5 id="1-1-2-3-回滚"><a href="#1-1-2-3-回滚" class="headerlink" title="1.1.2.3 回滚"></a>1.1.2.3 回滚</h5><p>收到服务器的确认操作之后，如果确认操作和之前预测的操作一样，则万事大吉，不做任何改变；否则，客户端就需要回滚到最后一次服务器确认的正确帧，然后在执行<strong>追帧</strong>操作（从正确帧开始，快速执行中间的帧，直至最新的帧）</p>
+<h3 id="1-2-逻辑表现分离"><a href="#1-2-逻辑表现分离" class="headerlink" title="1.2 逻辑表现分离"></a>1.2 逻辑表现分离</h3><p>why？</p>
+<p>有效解决“卡顿”现象，对于由延迟引发的卡顿，逻辑不平滑，但可以在逻辑值之间进行插值，让表现平滑。逻辑空间严格按照帧同步的要求进行计算，表现空间获得逻辑计算的结果进行显示，并利用插值来平滑显示效果</p>
+<p>how？</p>
+<p>将一个游戏对象类拆分为两个类，分别为逻辑类和表现类</p>
+<p>逻辑类严格按照帧同步的要求进行计算（比如碰撞啊技能释放啊都是在这里，<u>不能用浮点数</u>），表现类就是<code>gameObject</code>的位置啊、动画等信息。逻辑对象和表现对象都有自己的ID，然后各自持有对方的引用，表现层就可以通过引用来获取逻辑层的计算结果</p>
+<h3 id="1-3-安全性（外挂）"><a href="#1-3-安全性（外挂）" class="headerlink" title="1.3 安全性（外挂）"></a>1.3 安全性（外挂）</h3><p>帧同步的逻辑计算是放在客户端的，所以客户端一旦被破解，就可以很容易地获得数据，开发外挂</p>
+<h3 id="1-4-避免使用浮点数"><a href="#1-4-避免使用浮点数" class="headerlink" title="1.4 避免使用浮点数"></a>1.4 避免使用浮点数</h3><p>帧同步技术的难点之一就是需要客户端计算结果的一致性。其中浮点数的运算在一些情况下是会产生不同的结果，所以实现帧同步要避免使用浮点数</p>
+<h3 id="1-5-使用UDP"><a href="#1-5-使用UDP" class="headerlink" title="1.5 使用UDP"></a>1.5 使用UDP</h3><p>在UDP之上实现了可靠性，增加序号和确认机制</p>
+<ol>
+<li>为每个数据包增加序列号，每发一次，增加本地序号</li>
+<li>每次收到包，把收到的包上序列号变为确认字符，发送包的时候带上这些确认字符</li>
+</ol>
+<h2 id="2-状态同步"><a href="#2-状态同步" class="headerlink" title="2. 状态同步"></a>2. 状态同步</h2><p>一个客户端发出操作指令给服务器，<u>服务器计算出结果</u>，更新状态，再将游戏中的所有<u>状态广播</u>给其他客户端</p>
+<blockquote>
+<p>逻辑计算在服务端，逻辑计算包括普攻、属性、移动、AI、碰撞、技能逻辑</p>
+</blockquote>
+<ul>
+<li>安全性高</li>
+<li>断线重连容易，服务器再传一次数据就行了</li>
+</ul>
+<p>为什么不能用浮点数（float）？因为要保证计算结果一致</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/105390563">https://zhuanlan.zhihu.com/p/105390563</a></p>
+<p><a target="_blank" rel="noopener" href="https://jonyzhao.gitbooks.io/gamedev/content/Network/FrameLockStepSync.html">https://jonyzhao.gitbooks.io/gamedev/content/Network/FrameLockStepSync.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/36884005">https://zhuanlan.zhihu.com/p/36884005</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/323505671">https://www.zhihu.com/question/323505671</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youxituoluo.com/528021.html">https://www.youxituoluo.com/528021.html</a></p>
+<p><a target="_blank" rel="noopener" href="http://codebear.fun/index.php/2020/04/02/548.html">http://codebear.fun/index.php/2020/04/02/548.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/8cca5458c45b">https://www.jianshu.com/p/8cca5458c45b</a></p>
+<p><a target="_blank" rel="noopener" href="http://bindog.github.io/blog/2015/03/10/synchronization-in-multiplayer-networked-game-lockstep/">http://bindog.github.io/blog/2015/03/10/synchronization-in-multiplayer-networked-game-lockstep/</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E7%BD%91%E7%BB%9C%E5%A4%9A%E4%BA%BA%E6%B8%B8%E6%88%8F%E7%BC%96%E7%A8%8B/%E5%B8%A7%E5%90%8C%E6%AD%A5%E4%B8%8E%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5/">
+    <time datetime="2022-09-12T01:41:00.691Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/如何减少DrawCall？" class="post-图形学&amp;游戏开发/如何减少DrawCall？ post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%A6%82%E4%BD%95%E5%87%8F%E5%B0%91DrawCall%EF%BC%9F/" data-id="cl829mimm000vssv57t4yd9ea" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>draw call就是CPU发出发出绘制指令，调用GPU，GPU再进行渲染 </p>
+<p>GPU渲染的速度是很快的，相比之下，CPU进行绘制调用的耗时还要大一些，所以讨论如何减小draw call是有意义的</p>
+<h5 id="1-动态批处理"><a href="#1-动态批处理" class="headerlink" title="1. 动态批处理"></a>1. 动态批处理</h5><p>前提是<u>共享材质</u>，运行时多次合并，每渲染一帧就要进行一次合并操作；只适用于小物体。</p>
+<h5 id="2-静态批处理"><a href="#2-静态批处理" class="headerlink" title="2. 静态批处理"></a>2. 静态批处理</h5><p>前提也是<u>共享材质</u>，但只合并所有的静态物体，且只在运行前进行一次合并。</p>
+<p>静态批处理比动态批处理要高效，但缺点是要<u>占用更多的内存</u>来存储合并后的几何结构。比如对1000个使用同样树模型的树木使用静态批处理，存储时就会多占用1000倍的内存。</p>
+<p>在内部实现上，Unity首先把这些静态物体变换到世界空间下， 然后为它们构建一个更大的顶点和索引缓存。</p>
+<p>静态批处理要注意的地方</p>
+<h5 id="共享材质"><a href="#共享材质" class="headerlink" title="共享材质"></a>共享材质</h5><h5 id="3-GPU实例化"><a href="#3-GPU实例化" class="headerlink" title="3. GPU实例化"></a>3. GPU实例化</h5><p><a target="_blank" rel="noopener" href="https://catlikecoding.com/unity/tutorials/rendering/part-19/Rendering-19.pdf">https://catlikecoding.com/unity/tutorials/rendering/part-19/Rendering-19.pdf</a></p>
+<p>动态时进行的，适用于场景中存在大量相同材质和网格的物体的渲染</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%A6%82%E4%BD%95%E5%87%8F%E5%B0%91DrawCall%EF%BC%9F/">
+    <time datetime="2022-09-12T01:41:00.690Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/延迟渲染" class="post-图形学&amp;游戏开发/延迟渲染 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/" data-id="cl829mimm000wssv50b3ta69f" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="1-前向渲染【】"><a href="#1-前向渲染【】" class="headerlink" title="1. 前向渲染【】"></a>1. 前向渲染【】</h2><p>遍历场景中的每个光源，计算着色，最后在屏幕空间进行深度测试</p>
+<p>缺点：</p>
+<ol>
+<li>对每个光源都有一个Pass，每个pass计算一个逐像素光源的光照结果，复杂度较大</li>
+<li>进行深度测试后，一些片元不可见，它的光照计算结果相当于白算了</li>
+</ol>
+<h2 id="2-延迟渲染"><a href="#2-延迟渲染" class="headerlink" title="2. 延迟渲染"></a>2. 延迟渲染</h2><p>why？</p>
+<p>前向渲染在面对多光源场景时会有性能瓶颈，对每个光源都要进行一个Pass，每个Pass都要重新渲染一遍场景</p>
+<p>what？</p>
+<p>延迟渲染增加第三个缓冲区 ：G缓冲区，存储可见片元的属性（漫反射颜色，高光反射、自发光、法线、位置等）</p>
+<ul>
+<li>第一遍Pass：先从相机看场景，计算场景中的深度图，做深度测试，留下可见片元（利用深度缓冲技术），将它们的属性（光照数据）存入G缓冲区。第一个Pass实际上是将多个光源的信息都存储到了G-Buffer</li>
+<li>第二遍Pass：利用G缓冲区的属性对这些可见片元做昂贵的光照计算</li>
+</ul>
+<p>【每个pass都要干什么？为什么前向渲染需要多个Pass，多个Pass的意思是什么？要调用多次fragment shader吗？】</p>
+<p>延迟渲染的缺点：</p>
+<ul>
+<li>G缓冲占用了额外的空间</li>
+<li>不支持MSAA功能</li>
+<li>不能处理半透明物体</li>
+<li>对显卡有要求</li>
+</ul>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/">
+    <time datetime="2022-09-12T01:41:00.690Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/光线追踪（Ray Tracing）" class="post-图形学&amp;游戏开发/光线追踪（Ray Tracing） post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%EF%BC%88Ray%20Tracing%EF%BC%89/" data-id="cl829mimn000yssv5987b16nt" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h1 id="一、光线追踪（Ray-Tracing）"><a href="#一、光线追踪（Ray-Tracing）" class="headerlink" title="一、光线追踪（Ray Tracing）"></a>一、光线追踪（Ray Tracing）</h1><h2 id="1-为什么需要光线追踪？-star"><a href="#1-为什么需要光线追踪？-star" class="headerlink" title="1. 为什么需要光线追踪？:star:"></a>1. 为什么需要光线追踪？:star:</h2><ol>
+<li><p>光栅化不能很好地处理全局效果（软阴影、光线多次弹射），强行用光栅化处理会比较低效</p>
+<blockquote>
+<p>全局光照：直接光照+间接光照（回想渲染方程）</p>
+</blockquote>
+</li>
+<li><p>光栅化比较快，用的是经验模型，是近似的，质量精度比较低，多用来做实时渲染（比较快）。</p>
+<p>光线追踪比较准确，但是会非常慢，更多的被用来做一些离线渲染，比如电影、动画</p>
+</li>
+</ol>
+<h2 id="2-一些假设"><a href="#2-一些假设" class="headerlink" title="2. 一些假设"></a>2. 一些假设</h2><h2 id="3-光线追踪过程"><a href="#3-光线追踪过程" class="headerlink" title="3. 光线追踪过程"></a>3. 光线追踪过程</h2><p>3.1 光线投射</p>
+<p>3.2 像素着色</p>
+<p>3.3 递归</p>
+<p>3.4 着色结果叠加</p>
+<h2 id="4-光线求交——数学基础"><a href="#4-光线求交——数学基础" class="headerlink" title="4. 光线求交——数学基础"></a>4. 光线求交——数学基础</h2><h3 id="4-1-光线的表示"><a href="#4-1-光线的表示" class="headerlink" title="4.1 光线的表示"></a>4.1 光线的表示</h3><h3 id="4-2-球体"><a href="#4-2-球体" class="headerlink" title="4.2 球体"></a>4.2 球体</h3><h3 id="4-3-隐式表面"><a href="#4-3-隐式表面" class="headerlink" title="4.3 隐式表面"></a>4.3 隐式表面</h3><h3 id="4-4-三角网格"><a href="#4-4-三角网格" class="headerlink" title="4.4 三角网格"></a>4.4 三角网格</h3><h2 id="5-光线求交加速"><a href="#5-光线求交加速" class="headerlink" title="5. 光线求交加速"></a>5. 光线求交加速</h2><h3 id="5-1-包围盒-star"><a href="#5-1-包围盒-star" class="headerlink" title="5.1 包围盒:star:"></a>5.1 包围盒:star:</h3><h3 id="5-2-均匀网格"><a href="#5-2-均匀网格" class="headerlink" title="5.2 均匀网格"></a>5.2 均匀网格</h3><h3 id="5-3-空间划分"><a href="#5-3-空间划分" class="headerlink" title="5.3 空间划分"></a>5.3 空间划分</h3><h4 id="5-3-1-八叉树（Oct-Tree）"><a href="#5-3-1-八叉树（Oct-Tree）" class="headerlink" title="5.3.1 八叉树（Oct-Tree）"></a>5.3.1 八叉树（Oct-Tree）</h4><h4 id="5-3-2-BSP-Tree"><a href="#5-3-2-BSP-Tree" class="headerlink" title="5.3.2 BSP-Tree"></a>5.3.2 BSP-Tree</h4><h4 id="5-3-3-KD-Tree"><a href="#5-3-3-KD-Tree" class="headerlink" title="5.3.3 KD-Tree"></a>5.3.3 KD-Tree</h4><p>5.3.3.1 KD-Tree的两个缺点：</p>
+<ol>
+<li></li>
+<li></li>
+</ol>
+<h3 id="5-4-物体划分——层次包围盒（BVH）-star"><a href="#5-4-物体划分——层次包围盒（BVH）-star" class="headerlink" title="5.4 物体划分——层次包围盒（BVH）:star:"></a>5.4 物体划分——层次包围盒（BVH）:star:</h3><p>不是对空间进行划分，而是对物体进行划分</p>
+<h2 id="6-辐射度量学"><a href="#6-辐射度量学" class="headerlink" title="6. 辐射度量学"></a>6. 辐射度量学</h2><h3 id="6-1-为什么需要辐射度量学？-star"><a href="#6-1-为什么需要辐射度量学？-star" class="headerlink" title="6.1 为什么需要辐射度量学？:star:"></a>6.1 为什么需要辐射度量学？:star:</h3><p><code>Blinn-Phong</code>只是一种经验模型，而辐射度量学在物理的角度更加严谨</p>
+<ol>
+<li>能量Q</li>
+<li>功率，对应于光学中的power，lumen</li>
+</ol>
+<h3 id="6-2-Radiant-Intensity"><a href="#6-2-Radiant-Intensity" class="headerlink" title="6.2 Radiant Intensity"></a>6.2 Radiant Intensity</h3><p>每个单位立体角的power</p>
+<p>整个球的立体角</p>
+<h3 id="6-3-Irradiance"><a href="#6-3-Irradiance" class="headerlink" title="6.3 Irradiance"></a>6.3 Irradiance</h3><p>单位面积的能量</p>
+<h3 id="6-4-Radiance"><a href="#6-4-Radiance" class="headerlink" title="6.4 Radiance"></a>6.4 Radiance</h3><h2 id="7-BRDF-amp-反射方程"><a href="#7-BRDF-amp-反射方程" class="headerlink" title="7. BRDF &amp; 反射方程"></a>7. BRDF &amp; 反射方程</h2><h3 id="7-1-BRDF"><a href="#7-1-BRDF" class="headerlink" title="7.1 BRDF"></a>7.1 BRDF</h3><h3 id="7-2-反射方程"><a href="#7-2-反射方程" class="headerlink" title="7.2 反射方程"></a>7.2 反射方程</h3><h2 id="8-渲染方程"><a href="#8-渲染方程" class="headerlink" title="8.渲染方程"></a>8.渲染方程</h2><p>8.1 渲染方程</p>
+<p>8.2 理解渲染方程</p>
+<h2 id="9-Monte-Cralo积分"><a href="#9-Monte-Cralo积分" class="headerlink" title="9. Monte Cralo积分"></a>9. Monte Cralo积分</h2><p>why？</p>
+<p>有些复杂积分用黎曼积分解不出来，考虑另外一种积分方法，即Monte Cralo积分，它可以得到一个定积分的近似数值解</p>
+<p>what？</p>
+<p>从特殊情况去理解Monte Cralo积分</p>
+<p>how？</p>
+<h2 id="10-Path-Tracing"><a href="#10-Path-Tracing" class="headerlink" title="10. Path Tracing"></a>10. Path Tracing</h2><p>why?</p>
+<p>Whitted-style光线追踪的缺陷：</p>
+<ol>
+<li>光线弹射总是按镜面反射规则（没有考虑<u>不同材质的反射</u>）</li>
+<li>光线在漫反射处停止弹射（没有考虑到<u>间接光照</u>）</li>
+</ol>
+<p>what？</p>
+<p>path tracing基于渲染方程，考虑全局光照</p>
+<p>how？</p>
+<p>用蒙特卡洛积分求解渲染方程，得到出射方向$\omega_o$上的能量</p>
+<p>考虑间接光照：递归求解</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA%EF%BC%88Ray%20Tracing%EF%BC%89/">
+    <time datetime="2022-09-12T01:41:00.690Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-图形学&amp;游戏开发/动画/四元数" class="post-图形学&amp;游戏开发/动画/四元数 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/%E5%9B%9B%E5%85%83%E6%95%B0/" data-id="cl829min60026ssv5fam35dyk" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>四元数</p>
+<p>why?:star:</p>
+<p>为了方便地表示三维中任意的旋转</p>
+<p>且用四元数在旋转值之间插值更加平滑、自然【四元数插值】</p>
+<p>what</p>
+<p>顾名思义，四元数是个四维矢量，有四个分量<br>$$<br>q=[q_x,\ q_y,\ q_z,\ q_w]<br>$$</p>
+<h4 id="一、单位四元数"><a href="#一、单位四元数" class="headerlink" title="一、单位四元数"></a>一、单位四元数</h4><p><u>单位长度</u>的四元数（$q_x^2+q_y^2+q_z^2+q_w^2=1$）能表示三维旋转。四个分量是由<u>一个三维矢量</u>和<u>一个标量</u>构成<br>$$<br>\begin{eqnarray}<br>q&amp;=&amp;[qV\quad qS]\<br>&amp;=&amp;[\vec\alpha, sin,\frac{\theta}{2}\quad cos,\frac{\theta}{2}]<br>\end{eqnarray}<br>$$<br>其中$\vec\alpha$是旋转轴矢量，$\theta$是旋转角度，四维表示：$[a_xsin\frac{\theta}{2},\ a_ysin\frac{\theta}{2},\ a_zsin\frac{\theta}{2},\ cos\frac{\theta}{2}]$</p>
+<blockquote>
+<p>注意只有单位四元数才能代表三维旋转，例如两个四元数的加和并不能代表三维旋转，因为它们不是单位长度的fenbie</p>
+</blockquote>
+<h4 id="二、四元数运算（how）"><a href="#二、四元数运算（how）" class="headerlink" title="二、四元数运算（how）"></a>二、四元数运算（how）</h4><h5 id="1-四元数乘法"><a href="#1-四元数乘法" class="headerlink" title="1. 四元数乘法"></a>1. 四元数乘法</h5><p>对于两个四元数p，q，表示为 $q=[qV\quad qS],\quad p=[pV\quad pS]$，pq代表两个旋转的<u>合成旋转</u>，先旋转p，再旋转q。这里讨论的四元数乘法为格拉斯曼积<br>$$<br>pq=[(pS<em>qV+qS</em>pV+pV\times qV)\quad (pS*qS-pV\cdot qV)]<br>$$<br>结果仍用四元数来表示，第一个小括号里的结果是一个矢量，第二个小括号里的结果为标量</p>
+<h5 id="2-共轭及逆四元数"><a href="#2-共轭及逆四元数" class="headerlink" title="2. 共轭及逆四元数"></a>2. 共轭及逆四元数</h5><p>四元数q的逆记为$q^{-1}$，逆四元数和原四元数的乘积结果为标量1，即 $qq^{-1}=0i+0j+0k+1$，四元数$[0,0,0,1]$表示零旋转，旋转角为0。</p>
+<p>共轭四元数$q^*=[-qV\quad qS]$，即矢量部分反向，标量部分不变</p>
+<p>逆四元数$q^{-1}$定义为：<br>$$<br>q^{-1}=\frac{q^*}{|q|^2}<br>$$<br>分母为四元数的<u>模</u>，定义为<u>四个分量的平方和再开根号</u>，即$\sqrt{(q_x)^2+(q_y)^2+(q_z)^2+(q_w)^2}$，单位四元数的模为1，所以其逆=共轭，$q^{-1}=q^*$</p>
+<p>积的共轭、逆：（和矩阵类似）<br>$$<br>(pq)^*=q^<em>p^</em>\<br>(pq)^{-1}=q^{-1}p^{-1}<br>$$</p>
+<h5 id="3-以四元数旋转矢量"><a href="#3-以四元数旋转矢量" class="headerlink" title="3. 以四元数旋转矢量"></a>3. 以四元数旋转矢量</h5><p>首先要把矢量写成四元数的形式，把其标量部分设为0。若有一矢量v，其对应的四元数为$V=[v\quad0]=[v_x\quad v_y\quad v_z \quad0]$，旋转后的矢量v’为：<br>$$<br>v’=rotate(q,v)=qvq^{-1}=qvq^*<br>$$<br>因为用来旋转的四元数都是单位四元数，所以用共轭和逆都可以</p>
+<p>嵌套旋转，先旋转1，再旋转2，最后旋转3，$v’=q_3q_2q_1vq_1^{-1}q_2^{-1}q_3^{-1}$</p>
+<h5 id="4-四元数的等价矩阵"><a href="#4-四元数的等价矩阵" class="headerlink" title="4. 四元数的等价矩阵"></a>4. 四元数的等价矩阵</h5><p>任何表示三维旋转的<u>四元数</u>和<u>3X3矩阵</u>之间都可以<u>自由转换</u>，（最初学三维旋转的时候，用的表达方式就是3X3矩阵），具体公式我懒得打了，参考《游戏引擎架构 第二版》第181页</p>
+<h5 id="5-旋转性的线性插值"><a href="#5-旋转性的线性插值" class="headerlink" title="5. 旋转性的线性插值"></a>5. 旋转性的线性插值</h5><p>对四元数进行插值，可以简单地套用对四维矢量的线性插值</p>
+<blockquote>
+<ul>
+<li><p>插值都需要有一个媒介作为插值参数，想下做过的以重心坐标为媒介的插值，或者以两点间距离作为媒介的插值。类推旋转就是以角度为媒介进行插值，已知旋转前角度和旋转后角度，中间的角度已知，现在可以求出中间的角度在整个角度范围中的占比（0~1）作为插值的参数</p>
+</li>
+<li><p>对四元数的插值可以分解为对每一个分量的插值，对矢量的插值可以分解为对 x, y, z 三个分量上的插值，都可以分解到对标量进行插值，例如 a 和 b 之间的值，可以写为：<code>c=ta+(1-t)b</code>，<code>t</code>就是媒介参数</p>
+</li>
+<li><p>突然想到，动画关键帧之间的插值可以以<u>时间</u>为媒介啊！</p>
+</li>
+</ul>
+</blockquote>
+<p>给定两个四元数 $q_A$ 和 $q_B$，可找出在旋转 A 和旋转 B 之间 $\beta$ 百分点的中间旋转 $q_{LERP}$<br>$$<br>q_{LERP}=LERP(q_A,q_B,\beta)=\frac{(1-\beta)q_A+\beta q_B}{|(1-\beta)q_A+\beta q_B|}=normalize\left(<br>{\begin{bmatrix}<br>(1-\beta)q_{A_x}+\beta q_{B_x}\<br>(1-\beta)q_{A_y}+\beta q_{B_y}\<br>(1-\beta)q_{A_z}+\beta q_{B_z}\<br>(1-\beta)q_{A_w}+\beta q_{B_w}\<br>\end{bmatrix}}^T\right)<br>$$<br>这里的分母跟插值无关，是用来插值后进行归一化的，从数学的角度，<code>LERP</code>函数就是对两个四元数的加权平均，权重为 $1-\beta$ 和 $\beta$</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220514160554991.png" alt="image-20220514160554991"></p>
+<h5 id="6-球面线性插值"><a href="#6-球面线性插值" class="headerlink" title="6. 球面线性插值"></a>6. 球面线性插值</h5><p>四元数其实是一个四维超球面上的点，上述<code>LERP</code>只是在超球的弦上进行插值，而不是在超球面上进行插值，在弦上插值就会引入误差，当 $\beta$ 以恒定速率改变时，旋转动画并非以恒定角速率进行，但由于<code>LERP</code>开销比较小，效果也还行，所以也常被采用</p>
+<p>球面线性插值，<code>SLERP</code>（s表示spherical）</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E5%8A%A8%E7%94%BB/%E5%9B%9B%E5%85%83%E6%95%B0/">
+    <time datetime="2022-09-12T01:41:00.690Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+  
+    <nav id="pagination">
+      <nav id="page-nav">
+        <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
+      </nav>
+    </nav>
+  
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

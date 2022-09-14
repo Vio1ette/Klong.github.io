@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="再勇敢一点，再自信一点">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/page/7/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="再勇敢一点，再自信一点">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main">
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款 05：了解C++默认编写并调用了哪些函数" class="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款 05：了解C++默认编写并调用了哪些函数 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE%2005%EF%BC%9A%E4%BA%86%E8%A7%A3C++%E9%BB%98%E8%AE%A4%E7%BC%96%E5%86%99%E5%B9%B6%E8%B0%83%E7%94%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E5%87%BD%E6%95%B0/" data-id="cl829minc002sssv5f3cocvv9" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>对于一个空类</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Empty</span>&#123;</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<p> C++编译器会自动为它添加一些代码，其等价于：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Empty</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Empty</span>() &#123;...&#125;  								<span class="comment">//default构造函数</span></span><br><span class="line">    <span class="built_in">Empty</span>(<span class="keyword">const</span> Empty&amp; rhs) &#123;...&#125;				 <span class="comment">//copy构造函数</span></span><br><span class="line">    ~<span class="built_in">Empty</span>() &#123;...&#125;							    <span class="comment">//析构函数</span></span><br><span class="line">  </span><br><span class="line">    Empty&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Empty&amp; rhs) &#123;...&#125;	  <span class="comment">//copy assignment 操作符</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：</p>
+<ul>
+<li>这些函数都是 public inline 的</li>
+<li>当且仅当这些函数被调用，编译器才会把它们创建出来</li>
+<li>编译器产出的析构函数是 non-virtual 的，除非这个 class 的 base class 自身有 virtual 析构函数</li>
+</ul>
+</blockquote>
+<p>这些函数做了什么？</p>
+<ul>
+<li><p>编译器会在default构造函数里放一些通用代码，比如：调用<code>base classes</code>和<code>non-staic</code>成员变量的构造函数和析构函数</p>
+</li>
+<li><p>对于 copy 构造函数和 copy assignment 操作符重载函数，编译器创建的版本只是简单地将来源对象的每一个 non-static 成员变量拷贝到目标对象（浅拷贝）</p>
+</li>
+</ul>
+<p>编译器拒绝产生 copy assignment 操作符的情况</p>
+<ol>
+<li><p>如果一个类内存在引用类型的成员变量（reference 成员）、const 成员，它们无法被赋值，编译器就不会为这个类生成 copy assignment 操作符重载函数，需要用户自己定义 copy assignment 操作符</p>
+</li>
+<li><p>如果 base class 将 copy assignment 操作符声明为 private，编译器也不会为其 derived class 生成 copy assignment 操作符，因为编译器生成的版本默认是可以处理其 base class 的成分的，但因为 derived class 无法访问其 base class 的 copy assignment 操作符（private），所以编译器不知道该怎么办了</p>
+</li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE%2005%EF%BC%9A%E4%BA%86%E8%A7%A3C++%E9%BB%98%E8%AE%A4%E7%BC%96%E5%86%99%E5%B9%B6%E8%B0%83%E7%94%A8%E4%BA%86%E5%93%AA%E4%BA%9B%E5%87%BD%E6%95%B0/">
+    <time datetime="2022-09-12T01:41:00.680Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++模板/模板基础" class="post-C++/C++模板/模板基础 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E6%A8%A1%E6%9D%BF/%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/" data-id="cl829mimo0010ssv58x5cg0cx" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>模板的实例化</p>
+<p>用具体类型取代模板类型参数的过程叫做“实例化”</p>
+<p>两阶段编译检查</p>
+<p>模板是被分两步编译的</p>
+<ol>
+<li><p>模板定义阶段，模板的检查不包含类型参数的检查，只包含</p>
+<ul>
+<li>语法检查</li>
+</ul>
+</li>
+<li><p>模板实例化阶段</p>
+</li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E6%A8%A1%E6%9D%BF/%E6%A8%A1%E6%9D%BF%E5%9F%BA%E7%A1%80/">
+    <time datetime="2022-09-12T01:41:00.678Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/STL/自定义比较器" class="post-C++/STL/自定义比较器 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/STL/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%AF%94%E8%BE%83%E5%99%A8/" data-id="cl829mimt001assv51i25a91o" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h3 id="有序容器-map-set-multimap-multiset-自定义比较器"><a href="#有序容器-map-set-multimap-multiset-自定义比较器" class="headerlink" title="有序容器(map, set, multimap, multiset)自定义比较器"></a>有序容器(map, set, multimap, multiset)自定义比较器</h3><h4 id="1-函数指针"><a href="#1-函数指针" class="headerlink" title="1. 函数指针"></a>1. 函数指针</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">my_fun</span><span class="params">(<span class="keyword">const</span> my_Class &amp;a, <span class="keyword">const</span> my_Class &amp;b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a.<span class="built_in">length</span>() &lt; b.<span class="built_in">length</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="function">set&lt;my_Class, <span class="title">decltype</span><span class="params">(my_fun)</span>*&gt; <span class="title">st</span><span class="params">(my_fun)</span></span>; <span class="comment">// 构造函数的参数也可以写为 st(&amp;my_fun)</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>定义 set 的第二个参数应该是函数指针</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(my_fun)*  <span class="comment">//decltype的结果仅仅是函数类型，只有加上 * 才能获得函数指针</span></span><br></pre></td></tr></table></figure>
+
+<p>用 <code>my_fun</code> 或 <code>&amp;my_fun</code> 作为构造函数的参数</p>
+<blockquote>
+<p>对函数名来讲，加不加星号（都表示函数类型），取不取地址（都表示函数地址，函数指针类型），没区别</p>
+</blockquote>
+<h4 id="2-仿函数"><a href="#2-仿函数" class="headerlink" title="2. 仿函数"></a>2. 仿函数</h4><h4 id="3-Lambda表达式"><a href="#3-Lambda表达式" class="headerlink" title="3. Lambda表达式"></a>3. Lambda表达式</h4>
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/STL/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%AF%94%E8%BE%83%E5%99%A8/">
+    <time datetime="2022-09-12T01:41:00.678Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/STL/关联容器/关联容器基础" class="post-C++/STL/关联容器/关联容器基础 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/STL/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%9F%BA%E7%A1%80/" data-id="cl829min8002hssv52pcl70vp" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <hr>
+<hr>
+<h2 id="关联容器-map-set-pair"><a href="#关联容器-map-set-pair" class="headerlink" title="关联容器(map, set, pair)"></a>关联容器(map, set, pair)</h2><h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h3><ul>
+<li><strong>空容器</strong>（调用默认构造函数）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map&lt;string, <span class="keyword">size_t</span>&gt; mp; </span><br><span class="line">set&lt;string&gt; st; </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>列表初始化</strong></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set&lt;string&gt; st = &#123;<span class="string">&quot;aaa&quot;</span>,<span class="string">&quot;bbb&quot;</span>&#125;;</span><br><span class="line">map&lt;string, string&gt; mp = &#123;&#123;<span class="string">&quot;Joey&quot;</span>,<span class="string">&quot;Phoebe&quot;</span>&#125;,&#123;<span class="string">&quot;Ross&quot;</span>,<span class="string">&quot;Rachel&quot;</span>&#125;&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>迭代器</strong></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">set&lt;<span class="keyword">int</span>&gt; <span class="title">iset</span><span class="params">(ivec.begin(), ivec.end())</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>也可以将关联容器初始化为另一个同类型容器的<strong>拷贝</strong>【?】</p>
+<p>从一个<strong>值范围</strong>来初始化关联容器，只要这些值能转化为容器所需类型【?】</p>
+<p><strong>值初始化</strong>【?】</p>
+<h3 id="2-pair相关"><a href="#2-pair相关" class="headerlink" title="2. pair相关"></a>2. <strong>pair</strong>相关</h3><ul>
+<li>基础操作</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113101831838.png" alt="pair上的操作"></p>
+<ul>
+<li>返回值类型为 pair（对返回值列表初始化）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">pair&lt;string, <span class="keyword">int</span>&gt; <span class="title">my_fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> &#123;s1, i1&#125;;</span><br><span class="line">    <span class="keyword">return</span> pair&lt;string, <span class="keyword">int</span>&gt;(); <span class="comment">//构造一个空的 pair</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-关键字、值类型"><a href="#3-关键字、值类型" class="headerlink" title="3. 关键字、值类型"></a>3. 关键字、值类型</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">key_type			<span class="comment">//键类型</span></span><br><span class="line">mapped_type			<span class="comment">//值类型（只适用于map）</span></span><br><span class="line">value_type			<span class="comment">//对set，与key_type相同</span></span><br><span class="line">					<span class="comment">//对map，pair键值对：pair&lt;const key_type, mapped_type&gt;, //注意第一个为const</span></span><br></pre></td></tr></table></figure>
+
+<p>如何使用？：<strong>域运算符</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map&lt;string, <span class="keyword">int</span>&gt;::mapped_type v1;  <span class="comment">//其余类似</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-迭代器"><a href="#4-迭代器" class="headerlink" title="4. 迭代器"></a>4. 迭代器</h3><p>解引用一个关联容器迭代器，会得到一个 <code>value_type</code> 的<strong>引用</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> map_it = mp.<span class="built_in">begin</span>();</span><br><span class="line"><span class="comment">//(*map_it) 是 value_type，一个pair类型的引用</span></span><br><span class="line"><span class="comment">// -&gt; 可以用来解引用</span></span><br><span class="line">map_it-&gt;first   <span class="comment">// 关键字，是const的</span></span><br><span class="line">map_it-&gt;second  <span class="comment">// 值，非const，可以改变</span></span><br><span class="line">++map_it-&gt;second; <span class="comment">// 值自增 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// set 的迭代器是 const 的，set的关键字是只读的</span></span><br><span class="line"><span class="keyword">auto</span> set_it = st.<span class="built_in">begin</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-遍历"><a href="#5-遍历" class="headerlink" title="5. 遍历"></a>5. 遍历</h3><ol>
+<li>用<strong>迭代器</strong>遍历</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> map_it = mp.<span class="built_in">cbegin</span>();</span><br><span class="line"><span class="keyword">while</span>(map_it != mp.<span class="built_in">cend</span>())&#123;</span><br><span class="line">    <span class="comment">// do something with map_it-&gt;first, map_it-&gt;second</span></span><br><span class="line">    ++map_it;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>for each</strong> 语法</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> x:mp)&#123;</span><br><span class="line">    <span class="comment">//每一个 x 都是 pair 类型</span></span><br><span class="line">    <span class="comment">//x.first</span></span><br><span class="line">    <span class="comment">//x.second</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-添加元素"><a href="#6-添加元素" class="headerlink" title="6. 添加元素"></a>6. 添加元素</h3><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220402155957813.png" alt="image-20220402155957813"></p>
+<ol>
+<li>set</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vecrot&lt;<span class="keyword">int</span>&gt; v = &#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">1</span>&#125;;</span><br><span class="line"></span><br><span class="line">set&lt;<span class="keyword">int</span>&gt; st;</span><br><span class="line">st.<span class="built_in">insert</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>()); <span class="comment">//一对迭代器</span></span><br><span class="line">st.<span class="built_in">insert</span>(&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>map</li>
+</ol>
+<p><code>insert</code> 一个 <code>pair</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">map&lt;string, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">string word;</span><br><span class="line"></span><br><span class="line">mp.<span class="built_in">insert</span>(&#123;word, <span class="number">1</span>&#125;);  <span class="comment">// 初始化列表构造 pair</span></span><br><span class="line">mp.<span class="built_in">insert</span>(pair&lt;string, <span class="keyword">int</span>&gt;(word, <span class="number">1</span>);  <span class="comment">// pair 没有不带等号的列表初始化</span></span><br><span class="line">mp.<span class="built_in">insert</span>(make_pair&lt;string, <span class="keyword">int</span>&gt;(word, <span class="number">1</span>)); <span class="comment">// make_pair 是一个函数</span></span><br><span class="line">mp.<span class="built_in">insert</span>(map&lt;string, <span class="keyword">int</span>&gt;::<span class="built_in">value_type</span>(word, <span class="number">1</span>)); <span class="comment">//也用小括号来初始化一个 pair</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><code>insert</code> 的返回值</li>
+</ol>
+<ul>
+<li>不重（有添加失败的风险，已存在）</li>
+</ul>
+<p>添加单一元素的 <code>insert</code> 和 <code>emplace</code> 返回一个 pair&lt;迭代器，bool&gt;</p>
+<p><code>迭代器</code>：指向刚添加的元素</p>
+<p><code>bool</code>：如果插入成功（从无到有），返回 <code>true</code>，否则返回 <code>false</code></p>
+<ul>
+<li>可重（没有添加失败的风险）</li>
+</ul>
+<p>multi，<code>insert</code>只返回一个迭代器，指向刚添加的新元素</p>
+<h3 id="7-删除元素"><a href="#7-删除元素" class="headerlink" title="7. 删除元素"></a>7. 删除元素</h3><p>erase</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113111113342.png" alt="从关联容器删除元素"></p>
+<h3 id="8-特殊的map下标"><a href="#8-特殊的map下标" class="headerlink" title="8. 特殊的map下标"></a>8. 特殊的map下标</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mp[key]==value  <span class="comment">//访问 键key 对应的 value值</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>若 <code>key</code> 不存在，则<strong>插入</strong>，并且将其值进行初始化 <code>value</code></p>
+</li>
+<li><p>只能对 <strong>非const</strong> 的 <code>map</code> 使用下标，因为可能会插入值</p>
+</li>
+<li><p>map 的下标操作返回一个 <strong>mapped_type</strong> 对象，<strong>左值</strong></p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113111754675.png" alt="map的下标操作"></p>
+<h3 id="9-访问、查找元素"><a href="#9-访问、查找元素" class="headerlink" title="9. 访问、查找元素"></a>9. 访问、查找元素</h3><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113112310777.png" alt="在一个关联容器中查找操作"></p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113112230892.png" alt="查找"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(mp.<span class="built_in">find</span>(<span class="string">&quot;one key&quot;</span>) == mp.<span class="built_in">end</span>())&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-无序容器-unordered-map、unordered-set"><a href="#10-无序容器-unordered-map、unordered-set" class="headerlink" title="10. 无序容器(unordered_map、unordered_set)"></a>10. 无序容器(unordered_map、unordered_set)</h3><p>底层都由<u>哈希表</u>实现，其find和count的时间复杂度为O(1)</p>
+<blockquote>
+<p>在一般情况下，哈希表查找的时间复杂度均摊为O(1) ，但是极端情况下会因为哈希碰撞退化到O(n)</p>
+</blockquote>
+<p>无序容器自定义哈希函数，自定义比较操作符【坑】</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/STL/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%9F%BA%E7%A1%80/">
+    <time datetime="2022-09-12T01:41:00.678Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++基础/变量声明、定义，extern，外部链接，内部链接，静态链接" class="post-C++/C++基础/变量声明、定义，extern，外部链接，内部链接，静态链接 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E3%80%81%E5%AE%9A%E4%B9%89%EF%BC%8Cextern%EF%BC%8C%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5%EF%BC%8C%E5%86%85%E9%83%A8%E9%93%BE%E6%8E%A5%EF%BC%8C%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5/" data-id="cl829min0001tssv5ho1e85mx" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h3 id="1-声明和定义的关系"><a href="#1-声明和定义的关系" class="headerlink" title="1. 声明和定义的关系"></a>1. 声明和定义的关系</h3><p>声明使得<u>名字</u>为程序所知，规定了变量的类型和名字，一个文件如果想使用别处定义的名字则必须包含对那个名字的声明</p>
+<p>定义负责<u>创建</u>与名字关联的<u>实体</u>，声明规定了变量的类型和名字，在这一点上定义与之相同。但除此之外，<u>定义还负责申请存储空间</u>，也可能会为变量赋一个初始值。</p>
+<p>如果想<u>单独声明</u>一个变量，而<u>不定义</u>它，就在变量名前添加关键字<u>extern</u>，而且<u>不要显示地初始化</u>变量</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i;  <span class="comment">//声明i而非定义i</span></span><br><span class="line"><span class="keyword">int</span> j;  	   <span class="comment">//声明并定义j，此处虽然没有显示初始化，但已经为j分配内存了</span></span><br></pre></td></tr></table></figure>
+
+<p>定义有两种写法，第一是不加extern，第二是显示初始化，任何包含了显示初始化的声明即成为定义，即使有extern存在</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">double</span> pi = <span class="number">3.14</span>;   <span class="comment">//定义</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><u>在函数体内部，如果试图初始化一个由extern关键字标记的变量，将引发错误</u>，extern定义的变量必须是全局的，这样才可能在其他文件中使用，所以不能再语句块里定义</p>
+</blockquote>
+<h3 id="2-extern"><a href="#2-extern" class="headerlink" title="2. extern"></a>2. extern</h3><p>如果要在多个文件中使用外部（全局）变量，只需要在一个文件中包含该变量的定义（单定义规则），但在<strong>使用该变量的其他所有文件中</strong>，都必须使用关键字<code>extern</code>声明它：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//file01.cpp</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> cats = <span class="number">20</span>; <span class="comment">//定义</span></span><br><span class="line"><span class="keyword">int</span> dogs = <span class="number">22</span>; 		  <span class="comment">//定义</span></span><br><span class="line"><span class="keyword">int</span> fleas;		  	  <span class="comment">//还是定义，默认初始化为0</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// file02.cpp</span></span><br><span class="line"><span class="comment">// use cats and dogs from file01.cpp</span></span><br><span class="line"><span class="comment">//非定义，仅声明</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> cats;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> dogs;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//file98.cpp</span></span><br><span class="line"><span class="comment">//use cats, dogs, and fleas from file01.cpp</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> cats;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> dogs;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> fleas;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>file01.cpp</code> 中 <code>cats</code> 的<code>extern</code>是可以省略的，效果一样</p>
+</blockquote>
+<h3 id="2-不能在函数体内部初始化一个extern变量"><a href="#2-不能在函数体内部初始化一个extern变量" class="headerlink" title="2. 不能在函数体内部初始化一个extern变量"></a>2. 不能在函数体内部初始化一个<code>extern</code>变量</h3><p><img src="D:\Hugo\Sites\Puppy's\static\images\extern-大型项目工程中使用全局变量\image-20211101202636295.png" alt="extern"></p>
+<p>原因：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/17090354/why-does-initializing-an-extern-variable-inside-a-function-give-an-error">c++ - Why does initializing an extern variable inside a function give an error? - Stack Overflow</a></p>
+<p><code>extern</code>变量告诉编译器，整个项目中的所有同名<code>symbol</code>，都指的是同一个<code>externally defined i</code>，所以如果允许在函数内初始化（定义）一个被<code>extern</code>标记的变量，就会有==多重定义==的风险</p>
+<p>例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i; <span class="comment">// 同一个 externally defined i</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">10</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Hi&quot;</span> &lt;&lt; i &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">int</span> i; <span class="comment">// 这个 extern 会影响到其作用域内的所有 i，但是会被局部 i 屏蔽</span></span><br><span class="line">    i++;</span><br><span class="line">    <span class="built_in">test</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E3%80%81%E5%AE%9A%E4%B9%89%EF%BC%8Cextern%EF%BC%8C%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5%EF%BC%8C%E5%86%85%E9%83%A8%E9%93%BE%E6%8E%A5%EF%BC%8C%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5/">
+    <time datetime="2022-09-12T01:41:00.677Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++基础/函数调用栈帧解析" class="post-C++/C++基础/函数调用栈帧解析 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88%E5%B8%A7%E8%A7%A3%E6%9E%90/" data-id="cl829min0001ussv5a3fyfjrb" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>函数调用栈帧解析</p>
+<p>%ebp是栈底指针，%esp是栈顶指针</p>
+<p>调用一个函数时，首先会将参数压栈，然后将返回地址压栈，</p>
+<p>调用指令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call label; </span><br></pre></td></tr></table></figure>
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A0%88%E5%B8%A7%E8%A7%A3%E6%9E%90/">
+    <time datetime="2022-09-12T01:41:00.677Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++基础/数组名和指针的区别" class="post-C++/C++基础/数组名和指针的区别 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E6%95%B0%E7%BB%84%E5%90%8D%E5%92%8C%E6%8C%87%E9%92%88%E7%9A%84%E5%8C%BA%E5%88%AB/" data-id="cl829min1001wssv5b1h06hol" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>数组名和指针的区别</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span>* p = &amp;a;</span><br><span class="line"><span class="keyword">int</span> c[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><p>数组名是常量，不能进行自增自减操作，而指针可以</p>
+</li>
+<li><p>将数组名作为函数参数时，其会退化为一个指针</p>
+<blockquote>
+<p>注意<code>sizeof</code>不是函数，而是操作符，所以<code>sizeof(c)</code>的值 = 元素个数*每个元素所占的字节大小</p>
+<p>而<code>sizeof(p)</code>的值是固定的，32位机器上是4字节，64位机器上是8字节</p>
+</blockquote>
+</li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E6%95%B0%E7%BB%84%E5%90%8D%E5%92%8C%E6%8C%87%E9%92%88%E7%9A%84%E5%8C%BA%E5%88%AB/">
+    <time datetime="2022-09-12T01:41:00.677Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++基础/程序编译过程" class="post-C++/C++基础/程序编译过程 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B/" data-id="cl829min20021ssv52b8jfmnn" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>编译过程</p>
+<ol>
+<li>预处理阶段</li>
+<li>编译阶段</li>
+<li>汇编阶段</li>
+<li>链接阶段</li>
+</ol>
+<h4 id="1-预处理阶段"><a href="#1-预处理阶段" class="headerlink" title="1. 预处理阶段"></a>1. 预处理阶段</h4><p>处理所有#include、#define、条件编译、删除注释等</p>
+<h4 id="2-编译阶段"><a href="#2-编译阶段" class="headerlink" title="2. 编译阶段"></a>2. 编译阶段</h4><p>经过词法分析、语法分析、语义分析、优化后生成汇编代码</p>
+<h5 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h5><p>将源程序字符串分割为一个个Token，例如，标识符，操作符，常数</p>
+<h5 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h5><p>在词法分析的基础上，将Token串识别成语法单位，例如，赋值语句，算术表达式，生成<u>语法树</u></p>
+<h5 id="语义分析"><a href="#语义分析" class="headerlink" title="语义分析"></a>语义分析</h5><p>分析语句的静态语义，例如类型匹配，算数语义</p>
+<h5 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h5><h5 id="生成汇编代码"><a href="#生成汇编代码" class="headerlink" title="生成汇编代码"></a>生成汇编代码</h5><h4 id="3-汇编阶段"><a href="#3-汇编阶段" class="headerlink" title="3. 汇编阶段"></a>3. 汇编阶段</h4><p>汇编器，将汇编代码转换为机器指令</p>
+<h4 id="4-链接"><a href="#4-链接" class="headerlink" title="4. 链接"></a>4. 链接</h4><p>将一些库，链接到程序，分为静态链接和动态链接，最终生成可执行文件</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E7%A8%8B%E5%BA%8F%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B/">
+    <time datetime="2022-09-12T01:41:00.677Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++基础/内存对齐" class="post-C++/C++基础/内存对齐 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/" data-id="cl829min7002assv5apebbazq" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h5 id="1-对于每个数据成员"><a href="#1-对于每个数据成员" class="headerlink" title="1. 对于每个数据成员"></a>1. 对于每个数据成员</h5><p>如果数据成员类型的长度为$M$，指定的（默认）对齐值为$N$，则实际的对齐值为$q=min(M,N)$，成员的开始地址必须为<code>q</code>的倍数</p>
+<h5 id="2-结构体整体大小"><a href="#2-结构体整体大小" class="headerlink" title="2. 结构体整体大小"></a>2. 结构体整体大小</h5><p>每个数据成员的内存分配完成后，检查结构体整体的大小是否为$r=min(max(M),N)$的整数倍，<code>r</code>是最大数据成员的大小和结构体默认对齐值中的较小者</p>
+<blockquote>
+<p>C++中可用#pragma_pack(N)调整默认对齐值</p>
+</blockquote>
+<h5 id="3-结构体中存在数组"><a href="#3-结构体中存在数组" class="headerlink" title="3. 结构体中存在数组"></a>3. 结构体中存在数组</h5><p>数组的对齐值为单个数组元素的对齐值，而不是数组的整体大小</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">  <span class="keyword">char</span> c;</span><br><span class="line">  <span class="keyword">char</span> ary[<span class="number">4</span>];</span><br><span class="line">  <span class="keyword">short</span> s;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>假设默认对齐值比所有数据成员都大。c占1字节，ary数组元素类型为char，其对齐值为1字节，所以c和ary一共占5字节，short的对齐值为2字节，其开始地址必须为2的倍数，所以需要在ary后插入1字节的对齐数据，再安放short s。现在结构体总共占8字节，而结构体中最大的数据类型为short，即2字节，8是2的倍数，所以不需要再对齐了。</p>
+<h5 id="4-嵌套结构体"><a href="#4-嵌套结构体" class="headerlink" title="4. 嵌套结构体"></a>4. 嵌套结构体</h5><p>跟数组类似，嵌套结构体的对齐值跟结构体整体大小无关，而是上面提到过的<code>r</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sstOne</span>&#123;</span></span><br><span class="line">  <span class="keyword">char</span> c;		<span class="comment">//1字节</span></span><br><span class="line">  <span class="keyword">char</span> ary[<span class="number">4</span>];  <span class="comment">//5字节</span></span><br><span class="line">  <span class="keyword">short</span> s;  	<span class="comment">//2字节</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stTwo</span>&#123;</span></span><br><span class="line">  <span class="keyword">int</span> n; 		<span class="comment">//4字节</span></span><br><span class="line">  stOne one;    <span class="comment">//占用8字节，对齐值为2字节</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/">
+    <time datetime="2022-09-12T01:41:00.677Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++内存管理/内存池" class="post-C++/C++内存管理/内存池 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E6%B1%A0/" data-id="cl829mimo0011ssv5flv71iee" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="1-why？（背景）"><a href="#1-why？（背景）" class="headerlink" title="1. why？（背景）"></a>1. why？（背景）</h2><p>有了new/delete，malloc/free，为什么要还要用内存池？</p>
+<p>操作系统默认的内存管理函数的设计是<u>通用</u>的，为了维护通用性，会考虑许多情况下的内存分配方式，所以会有一些额外开销。而在具体的应用程序中，可以预先给应用程序一块适当大小的连续内存（内存池），然后<u>由应用程序自己来管理内存池</u>，仅当应用程序需要更多内存池时，才需要调用操作系统的内存分配函数。</p>
+<h2 id="2-what？（原理）"><a href="#2-what？（原理）" class="headerlink" title="2. what？（原理）"></a>2. what？（原理）</h2><p>内存池是一块连续内存，可以分类为单线程内存池或多线程内存池，还可分类为固定内存池和可变内存池。</p>
+<p>固定内存池原理图：</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/QQ%E5%9B%BE%E7%89%8720220416112041.jpg" alt="QQ图片20220416112041"></p>
+<p>内存池头指针指向应用程序申请的第一块内存池，后续申请的内存池也由链表连接，内存池块的大小固定，每一块内存池块包含一个块头和一些内存单元，使用某一块内存池时，根据其块头信息，查询空闲的内存单元，然后返回空闲单元的地址。</p>
+<p>内存池性能优化方面的优点：</p>
+<ul>
+<li>针对特殊情况，可以摒弃通用的内存分配算法和多线程保护</li>
+<li>一块内存池是连续的地址空间，所以增强了局部性</li>
+<li>没有内存碎片的问题</li>
+</ul>
+<h2 id="3-how？（实现）"><a href="#3-how？（实现）" class="headerlink" title="3. how？（实现）"></a>3. how？（实现）</h2>
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E6%B1%A0/">
+    <time datetime="2022-09-12T01:41:00.676Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+  
+    <nav id="pagination">
+      <nav id="page-nav">
+        <a class="extend prev" rel="prev" href="/page/6/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/">Next &amp;raquo;</a>
+      </nav>
+    </nav>
+  
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="C++初始化那些事儿1. 初始化 vs 赋值💢初始化不等于赋值，这是两个完全不同的操作 初始化：创建变量时赋予其一个初始值 赋值：把对象的当前值擦除，再用一个新值替换 2. 列表初始化C++初始化有很多种形式，这也是初始化问题复杂性的一个体现。 例如，想要定义一个名为 units_sold 的 int 变量并初始化为 0，以下 4 条语句都能做到这一点： 1234int units_sold &#x3D;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/2022/09/12/C++/%E5%88%9D%E5%A7%8B%E5%8C%96/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="C++初始化那些事儿1. 初始化 vs 赋值💢初始化不等于赋值，这是两个完全不同的操作 初始化：创建变量时赋予其一个初始值 赋值：把对象的当前值擦除，再用一个新值替换 2. 列表初始化C++初始化有很多种形式，这也是初始化问题复杂性的一个体现。 例如，想要定义一个名为 units_sold 的 int 变量并初始化为 0，以下 4 条语句都能做到这一点： 1234int units_sold &#x3D;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211109100945293.png">
+<meta property="article:published_time" content="2022-09-12T01:41:00.684Z">
+<meta property="article:modified_time" content="2022-09-12T01:41:00.684Z">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211109100945293.png">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-C++/初始化" class="post-C++/初始化 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E5%88%9D%E5%A7%8B%E5%8C%96/" data-id="cl829mimf000cssv5d9wq9kb8" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="C-初始化那些事儿"><a href="#C-初始化那些事儿" class="headerlink" title="C++初始化那些事儿"></a>C++初始化那些事儿</h2><h3 id="1-初始化-vs-赋值💢"><a href="#1-初始化-vs-赋值💢" class="headerlink" title="1. 初始化 vs 赋值💢"></a>1. 初始化 vs 赋值💢</h3><p>初始化不等于赋值，这是两个完全不同的操作</p>
+<p>初始化：创建变量时赋予其一个初始值</p>
+<p>赋值：把对象的当前值擦除，再用一个新值替换</p>
+<h3 id="2-列表初始化"><a href="#2-列表初始化" class="headerlink" title="2. 列表初始化"></a>2. 列表初始化</h3><p>C++初始化有很多种形式，这也是初始化问题复杂性的一个体现。 例如，想要定义一个名为 <code>units_sold</code> 的 <code>int</code> 变量并初始化为 <code>0</code>，以下 4 条语句都能做到这一点：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> units_sold = <span class="number">0</span>;  <span class="comment">//最正常的方式</span></span><br><span class="line"><span class="keyword">int</span> units_sold = &#123;<span class="number">0</span>&#125;; <span class="comment">//列表初始化</span></span><br><span class="line"><span class="keyword">int</span> units_sold&#123;<span class="number">0</span>&#125;; <span class="comment">// 列表初始化【】</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">units_sold</span><span class="params">(<span class="number">0</span>)</span></span>; <span class="comment">// 直接初始化</span></span><br></pre></td></tr></table></figure>
+
+<p>当用于内置类型的变量时，如果列表初始化存在丢失信息的风险，则编译器将报错：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> <span class="keyword">double</span> ld = <span class="number">3.1415026536</span>;</span><br><span class="line"><span class="keyword">int</span> a&#123;ld&#125;, b = &#123;ld&#125;; <span class="comment">// 列表初始化，报错，转换未执行，因为存在丢失信息（精度）的风险</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">c</span><span class="params">(ld)</span>, d </span>= ld; <span class="comment">// 正常，转换执行，虽然确实丢失了精度</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-值初始化-vs-默认初始化"><a href="#3-值初始化-vs-默认初始化" class="headerlink" title="3. 值初始化 vs. 默认初始化"></a>3. 值初始化 vs. 默认初始化</h3><h4 id="3-1-值初始化"><a href="#3-1-值初始化" class="headerlink" title="3.1 值初始化"></a>3.1 值初始化</h4><p>值初始化对于<u>内置类型</u>初始化为 0，对于<u>类类型</u>则调用<u>默认构造函数</u>，如果没有默认构造函数，则不能进行初始化</p>
+<p>如何判断是值初始化：</p>
+<ol>
+<li>使用了初始化器（如，圆括号，花括号）</li>
+<li><strong>没有</strong>提供初始值</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>();</span><br><span class="line"><span class="function">vector&lt;string&gt; <span class="title">vec</span><span class="params">(<span class="number">10</span>)</span></span>;  <span class="comment">// 10表示个数</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>当不采用动态分配内存的方式（即不用<code>new</code>时），<code>int a()</code>是错误的值初始化方式，因为它会<u>被理解为一个函数的声明</u>，而不是值初始化</p>
+<p>正确的初始化方式：<code>int a = int();</code></p>
+</blockquote>
+<h4 id="3-2-默认初始化"><a href="#3-2-默认初始化" class="headerlink" title="3.2 默认初始化"></a>3.2 默认初始化</h4><p>如果<strong>定义变量</strong>的时候<strong>没有指定初值</strong>，则变量被<strong>默认初始化（default initialized）</strong>，此时变量被赋予“<strong>默认值</strong>”</p>
+<blockquote>
+<p> <strong>默认值到底是什么？</strong></p>
+<p> （1）内置类型</p>
+<p> 由定义的位置决定：</p>
+<ol>
+<li><strong>任何函数之外</strong>的变量，它被初始化为 0</li>
+<li><strong>在函数体内部</strong>，将<strong>不被初始化</strong>，其值是<strong>未定义</strong>的，是<strong>不能被访问</strong>的</li>
+</ol>
+<p> （2）类对象</p>
+<p> <strong>类自己决定</strong>其变量的<strong>初始化方式</strong>、<strong>初始化值</strong>、<strong>是否允许不经初始化变量就定义出对象</strong></p>
+<p> 绝大多数类都支持<strong>无须显示初始化而定义对象</strong>，它会给没有初始化的<strong>类内变量</strong>提供一个合适的<strong>默认值</strong></p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">std::string empty; <span class="comment">// 默认值为空串</span></span><br><span class="line">Sales_item item; <span class="comment">// item的默认值是什么，由 Sales_item 这个类自己定义</span></span><br></pre></td></tr></table></figure>
+
+<p> 一些类要求每个对象都显示初始化， 如果没有就会报错</p>
+</blockquote>
+<h3 id="4-直接初始化-vs-拷贝初始化"><a href="#4-直接初始化-vs-拷贝初始化" class="headerlink" title="4. 直接初始化 vs. 拷贝初始化"></a>4. 直接初始化 vs. 拷贝初始化</h3><p>直接初始化：要求编译器使用<strong>普通的函数匹配</strong>，选择与我们提供的参数<strong>最匹配</strong>的构造函数（也可能最佳匹配上<strong>拷构</strong>）</p>
+<p>拷贝初始化：要求编译器将<strong>右侧运算对象</strong>拷贝到正在创建的对象中，需要的话可以进行类型转换</p>
+<blockquote>
+<p><strong>拷贝初始化</strong>一般调用<strong>拷贝构造函数</strong>，但也可能调用<strong>移动构造函数</strong></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">string dots(10, &#x27;.&#x27;);   //直初</span><br><span class="line">string s(dots);  		//使用了拷构的直初</span><br><span class="line">string s = dots; 		//拷初</span><br><span class="line">string null_book = &quot;9999&quot;;  //拷初</span><br><span class="line">string nines = string(100, &#x27;9&#x27;); //拷初</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>哪里有临时量生成？ 拷初的参数是 <code>const&amp;</code> 肯定没有临时量</p>
+</blockquote>
+<p>发生拷初的常见情况</p>
+<ol>
+<li><code>=</code></li>
+<li>非引用函数传参</li>
+<li>非引用函数返回值</li>
+</ol>
+<h3 id="5-数组的初始化"><a href="#5-数组的初始化" class="headerlink" title="5. 数组的初始化"></a>5. 数组的初始化</h3><h4 id="5-1-数组的初始化规则"><a href="#5-1-数组的初始化规则" class="headerlink" title="5.1 数组的初始化规则"></a>5.1 数组的初始化规则</h4><ol>
+<li>只有在定义数组的时候才能使用初始化，以后就不能使用了</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> cards[<span class="number">4</span>] = &#123;<span class="number">3</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;; <span class="comment">//okay</span></span><br><span class="line"><span class="keyword">int</span> hand[<span class="number">4</span>];</span><br><span class="line">hand[<span class="number">4</span>] = &#123;<span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">9</span>&#125;; <span class="comment">//not allowed，可以使用下标一一赋值</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>不允许数组间赋值</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hand = cards; <span class="comment">// not allowed</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>允许部分初始化，剩余的默认采用<u>值初始化</u></li>
+</ol>
+<h4 id="5-2-c-11新特性"><a href="#5-2-c-11新特性" class="headerlink" title="5.2 c++11新特性"></a>5.2 c++11新特性</h4><h4 id="列表初始化新特性"><a href="#列表初始化新特性" class="headerlink" title="列表初始化新特性"></a>列表初始化新特性</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> earnings[<span class="number">4</span>] &#123;<span class="number">1.2e4</span>, <span class="number">1.6e4</span>&#125;; <span class="comment">// 列表初始化，省略等号是可以的</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> counts[<span class="number">10</span>] = &#123;&#125;; <span class="comment">//所有10个元素都为0</span></span><br><span class="line"><span class="keyword">long</span> plifs[] = &#123;<span class="number">25</span>, <span class="number">92</span>, <span class="number">3.0</span>&#125;; <span class="comment">//报错，列表初始化禁止缩窄转换</span></span><br></pre></td></tr></table></figure>
+
+<p>关于<code>缩窄转换</code><a target="_blank" rel="noopener" href="https://blog.csdn.net/dai_peixian/article/details/52767057">C++11 narrowing convertions(缩窄转换)_dai_peixian的专栏-CSDN博客_缩窄转换</a></p>
+<h3 id="6-string初始化【6，7都是顺序容器，初始化可以放到一起】"><a href="#6-string初始化【6，7都是顺序容器，初始化可以放到一起】" class="headerlink" title="6. string初始化【6，7都是顺序容器，初始化可以放到一起】"></a>6. string初始化【6，7都是顺序容器，初始化可以放到一起】</h3><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211109100945293.png" alt="初始化string"></p>
+<center style="color:#C0C0C0;text-decoration:underline">Primer C++ 第五版，P76</center>
+
+<h3 id="7-vector初始化【】"><a href="#7-vector初始化【】" class="headerlink" title="7. vector初始化【】"></a>7. vector初始化【】</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;T&gt; v1;    <span class="comment">// 空vector，默认初始化</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v2</span><span class="params">(v1)</span></span>; <span class="comment">//拷贝初始化，要求两个vector对象的类型必须相同</span></span><br><span class="line">vector&lt;T&gt; v2 = v1; <span class="comment">//同上</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v3</span><span class="params">(n,val)</span></span>; <span class="comment">// v3包含n个重复元素，每个元素的值都是val</span></span><br><span class="line"><span class="function">vector&lt;T&gt; <span class="title">v4</span><span class="params">(n)</span></span>; <span class="comment">// v4包含n个元素，每个元素都被值初始化（如果是内置类型，0，如果是类类型，则执行类定义默认初始化）</span></span><br><span class="line">vector&lt;T&gt; v5&#123;a,b,c...&#125; <span class="comment">//列表初始化</span></span><br><span class="line">vector&lt;T&gt; v6 = &#123;a,b,c...&#125; <span class="comment">//同上 </span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果使用了花括号，但是提供的值不能用来完成列表初始化，编译器就会考虑用提供的值来构造 vector 对象</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vector&lt;string&gt; v7&#123;<span class="number">10</span>&#125;;  <span class="comment">//v7有10个默认初始化元素</span></span><br><span class="line">vector&lt;string&gt; v8&#123;<span class="number">10</span>, <span class="string">&quot;hi&quot;</span>&#125;; <span class="comment">//v8 有10个值为&quot;hi&quot;的元素</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="8"><a href="#8" class="headerlink" title="8."></a>8.</h3>
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E5%88%9D%E5%A7%8B%E5%8C%96/">
+    <time datetime="2022-09-12T01:41:00.684Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2022/09/12/C++/%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0/" rel="prev"><span class="meta-nav">←</span> (no title)</a></span>
+    
+    
+        <span class="nav-next"><a href="/2022/09/12/C++/%E5%8F%AA%E8%AF%BB%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E9%87%8F%E7%9A%84%E5%85%B3%E7%B3%BB/" rel="next">(no title) <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

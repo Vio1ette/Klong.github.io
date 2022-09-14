@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="shadowMap 第一个阶段，把光源当作一个摄像机去渲染一遍场景，然后将光源能照到的点的深度值存储在一张纹理上， 称为shadow map  第二个阶段，从相机视角渲染场景，并利用光源视角下的投影矩阵的逆矩阵，将坐标从世界空间转换到光源空间【如果要逆转换，不应该用view矩阵的逆吗？怎么这里说是投影矩阵的逆？】得到光源空间下的坐标和深度值，前者可以用来对shadow map进行查询，后者可以用来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/shadow%20mapping/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="shadowMap 第一个阶段，把光源当作一个摄像机去渲染一遍场景，然后将光源能照到的点的深度值存储在一张纹理上， 称为shadow map  第二个阶段，从相机视角渲染场景，并利用光源视角下的投影矩阵的逆矩阵，将坐标从世界空间转换到光源空间【如果要逆转换，不应该用view矩阵的逆吗？怎么这里说是投影矩阵的逆？】得到光源空间下的坐标和深度值，前者可以用来对shadow map进行查询，后者可以用来">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220513101640352.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220418103352469.png">
+<meta property="article:published_time" content="2022-09-12T01:41:00.689Z">
+<meta property="article:modified_time" content="2022-09-12T01:41:00.689Z">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220513101640352.png">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-图形学&amp;游戏开发/shadow mapping" class="post-图形学&amp;游戏开发/shadow mapping post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/shadow%20mapping/" data-id="cl829mimk000nssv5cz3sd75q" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>shadowMap</p>
+<p>第一个阶段，把光源当作一个摄像机去渲染一遍场景，然后将光源能照到的点的深度值存储在一张纹理上， 称为shadow map</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220513101640352.png" alt="image-20220513101640352"></p>
+<p>第二个阶段，从相机视角渲染场景，并利用光源视角下的投影矩阵的逆矩阵，将坐标从世界空间转换到光源空间【如果要逆转换，不应该用view矩阵的逆吗？怎么这里说是投影矩阵的逆？】得到光源空间下的坐标和深度值，前者可以用来对shadow map进行查询，后者可以用来和shadow map上的值进行比较，如果该点投影回光源视角的实际深度值大于在shadow map上对应的深度值，说明该点无法被光源照亮，处在阴影</p>
+<p>渲染方程的改变：</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220418103352469.png" alt="image-20220418103352469"></p>
+<p>GAMES202中主要实现的函数：</p>
+<ul>
+<li>DirectionalLight.js中的CalcLightMVP(translate, scale)函数</li>
+<li>phongFragment.glsl中的useShadowMap</li>
+<li>PCF</li>
+<li>PCSS</li>
+<li>main</li>
+</ul>
+<p>shadowMap是一个uniform变量，不知道是怎么得到的</p>
+<p>代码的实现是在已知shadowMap的基础之上进行的实现</p>
+<h2 id="0x01-CalcLightMVP-translate-scale"><a href="#0x01-CalcLightMVP-translate-scale" class="headerlink" title="0x01 CalcLightMVP(translate, scale)"></a>0x01 CalcLightMVP(translate, scale)</h2><p>利用给出的translate，scale，光线有关参数（lightPos、focalPoint、lightUp）得出MVP矩阵</p>
+<h2 id="0x02-useShadowMap-sampler2D-shadowMap-vec4-shadowCoord"><a href="#0x02-useShadowMap-sampler2D-shadowMap-vec4-shadowCoord" class="headerlink" title="0x02 useShadowMap(sampler2D shadowMap, vec4 shadowCoord)"></a>0x02 useShadowMap(sampler2D shadowMap, vec4 shadowCoord)</h2><p>shadowCoord是已经转换到light空间的点坐标，所以可以用其z坐标和shadowMap上的对应值做比较，如果是阴影，则visibility=0.0，可见则visibility=1.0</p>
+<h2 id="0x03-PCF"><a href="#0x03-PCF" class="headerlink" title="0x03 PCF"></a>0x03 PCF</h2><p>阴影抗锯齿，用shadowMap上的对应像素周围的多个像素，和shadowCoord.z做比较，比较结果从简单的0，1，变成了0~1之间的值，例如9次比较，6次为1，则visibility为6/9=0.667，可以在阴影边缘处实现抗锯齿的效果，进一步可以模拟软阴影</p>
+<h2 id="0x04-PCSS"><a href="#0x04-PCSS" class="headerlink" title="0x04 PCSS"></a>0x04 PCSS</h2><p>在shadowMap取多大的范围来一起作比较，添加两个因素来调节这个范围，遮挡物到光源的距离和光源的大小</p>
+<p>可以实现，近处的阴影偏硬，远处的阴影偏软</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/shadow%20mapping/">
+    <time datetime="2022-09-12T01:41:00.689Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/%E3%80%8A%E6%B8%B8%E6%88%8F%E5%B8%B8%E7%94%A8%E5%87%A0%E4%BD%95%E5%AD%A6%E3%80%8B%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" rel="prev"><span class="meta-nav">←</span> (no title)</a></span>
+    
+    
+        <span class="nav-next"><a href="/2022/09/12/%E5%9B%BE%E5%BD%A2%E5%AD%A6&%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/MVP%E5%8F%98%E6%8D%A2%E6%80%BB%E7%BB%93/" rel="next">(no title) <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

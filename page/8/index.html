@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="再勇敢一点，再自信一点">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/page/8/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="再勇敢一点，再自信一点">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main">
+  
+    <article id="post-C++/C++内存管理/new、delete" class="post-C++/C++内存管理/new、delete post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/new%E3%80%81delete/" data-id="cl829mimo0012ssv5gk7s2ju7" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>new操作符的执行过程：</p>
+<ol>
+<li>调用operator new分配内存（底层调用malloc()函数）</li>
+<li>调用构造函数</li>
+<li>返回相应类型的指针 </li>
+</ol>
+<h4 id="delete"><a href="#delete" class="headerlink" title="delete"></a>delete</h4><p>操作符的执行过程：</p>
+<ol>
+<li>调用析构函数</li>
+<li>调用operator delete释放对象内存，底层调用free()函数</li>
+</ol>
+<p>调用析构函数只是释放对象管理的资源，而 operator delete 释放对象本身的资源。例如 vector 可能的内存布局如下：</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220519104008938.png" alt="image-20220519104008938"></p>
+<p>栈中就是对象本身，而堆中就是 vector 对象管理的资源，析构函数释放的是堆资源，operator delete 释放的是栈资源</p>
+<p>​    </p>
+<p>delete this</p>
+<p>delete this如果发生在析构函数中，delete会调用析构函数，析构函数中有会执行delete，则会导致无限循环，使栈内存溢出</p>
+<p>delete this如果在普通函数中，则delete this之后不能再使用到成员资源（比如某个成员变量或者虚函数），否则就会报错</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/new%E3%80%81delete/">
+    <time datetime="2022-09-12T01:41:00.676Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++基础/inline" class="post-C++/C++基础/inline post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/inline/" data-id="cl829min1001vssv530j2gd7b" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>inline</p>
+<p>将函数标记为内联函数，如果成功内联，在运行时就可以避免函数调用所产生的开销，但过多的内联会导致代码碰撞</p>
+<p>inline和宏函数的区别</p>
+<ol>
+<li>宏函数在预编译阶段进行展开，而inline是在编译阶段</li>
+<li>宏函数有可能会产生歧义，且相比inline缺少类型检测</li>
+<li>inline只是对编译器的一个内联建议，不一定真正内联</li>
+<li></li>
+</ol>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/inline/">
+    <time datetime="2022-09-12T01:41:00.676Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++11/lambda表达式" class="post-C++/C++11/lambda表达式 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++11/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" data-id="cl829mimu001essv5ewbfhsv2" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>why？为什么要发明lambda函数？</p>
+<p>简化仿函数</p>
+<h4 id="1-语法"><a href="#1-语法" class="headerlink" title="1. 语法"></a>1. 语法</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[capture](parameters) <span class="keyword">mutable</span> -&gt; return_type&#123;statement&#125; </span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ul>
+<li><p>[capture]：lambda函数引出符</p>
+<blockquote>
+<p>[var]：以值传递的方式捕捉变量var</p>
+<p>[=]：以值传递的方式捕捉所有父作用域的变量（包括this）</p>
+<p>[&amp;var]：以引用传递的方式捕捉var</p>
+<p>[&amp;]：以引用传递的方式捕捉所有父作用域的变量（包括this）</p>
+<p>注意：1. 以上方式可以组合（[=, &amp;a, &amp;b]），但不允许重复捕获，例如[=, a]会导致编译错误</p>
+</blockquote>
+</li>
+<li><p>(parameters)：参数列表，不需要时可连同括号()一起省略</p>
+</li>
+<li><p>mutable：mutable修饰符。默认情况下lambda函数总是一个const函数，mutable可以取消其常量性。在使用该修饰符时，参数列表不可省略（即使参数为空）</p>
+</li>
+<li><p>-&gt;return_type：返回类型，没有返回值时，可连同-&gt;一起省略</p>
+</li>
+<li><p>{statement}：函数体</p>
+</li>
+</ul>
+<h4 id="2-lambda底层实现-amp-仿函数"><a href="#2-lambda底层实现-amp-仿函数" class="headerlink" title="2. lambda底层实现 &amp; 仿函数"></a>2. lambda底层实现 &amp; 仿函数</h4><h5 id="2-1-仿函数"><a href="#2-1-仿函数" class="headerlink" title="2.1 仿函数"></a>2.1 仿函数</h5><h6 id="仿函数定义"><a href="#仿函数定义" class="headerlink" title="仿函数定义"></a>仿函数定义</h6><p>在一个类中重载()运算符，可以将该类对象像函数一样使用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> _<span class="title">functor</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a + b;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> girls = <span class="number">3</span>, boys = <span class="number">4</span>;  </span><br><span class="line">    _functor totalChild;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">totalChild</span>(<span class="number">5</span>, <span class="number">6</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="仿函数的初始状态"><a href="#仿函数的初始状态" class="headerlink" title="仿函数的初始状态"></a>仿函数的初始状态</h6><p>仿函数可以有初始状态，这是它与普通函数的重要区别。<u>class私有成员的状态构成了仿函数的初始状态</u>，可以通过构造函数在声明对象时初始化状态</p>
+<blockquote>
+<p>仿函数其可以拥有多个不同的初始状态（多个具有不同初始值的对象）</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tax</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> rate;</span><br><span class="line">    <span class="keyword">int</span> base;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Tax</span>(<span class="keyword">float</span> r, <span class="keyword">int</span> b):<span class="built_in">rate</span>(r),<span class="built_in">base</span>(b)&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">float</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">float</span> money)</span></span>&#123;<span class="keyword">return</span> (money - base) * rate;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//调用构造函数</span></span><br><span class="line">    <span class="function">Tax <span class="title">high</span><span class="params">(<span class="number">0.4</span>, <span class="number">30000</span>)</span></span>;  			<span class="comment">// 设定初始状态（rate，base）</span></span><br><span class="line">    <span class="function">Tax <span class="title">middle</span><span class="params">(<span class="number">0.25</span>, <span class="number">20000</span>)</span></span>;  		<span class="comment">// 设定初始状态（rate，base）</span></span><br><span class="line">    cout &lt;&lt;<span class="string">&quot;tax over 3w:&quot;</span>&lt;&lt;<span class="built_in">high</span>(<span class="number">37500</span>)&lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;tax over 2w:&quot;</span> &lt;&lt; <span class="built_in">middle</span>(<span class="number">27500</span>) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-2-lambda函数与仿函数的比较"><a href="#2-2-lambda函数与仿函数的比较" class="headerlink" title="2.2 lambda函数与仿函数的比较"></a>2.2 lambda函数与仿函数的比较</h5><p><u>lambda捕捉父作用域（用户）的变量作为初始状态</u>，仿函数通过构造函数来初始化状态（构造函数的参数由用户传递）。事实上，仿函数是编译器<u>实现</u>lambda的一种方式，现阶段，通常<u>编译器</u>都会把lambda函数转化为一个仿函数</p>
+<blockquote>
+<p>lambda函数是仿函数的“语法糖”</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220401162858026.png" alt="image-20220401162858026"></p>
+<p>——图源：《深入理解C++11》</p>
+<h4 id="lambda捕获的参数存在内存中的什么位置？"><a href="#lambda捕获的参数存在内存中的什么位置？" class="headerlink" title="lambda捕获的参数存在内存中的什么位置？"></a>lambda捕获的参数存在内存中的什么位置？</h4><p>面试时遇到这个题，当时脑子懵了，没回答上来，其实挺简单的，猜都能猜到</p>
+<ol>
+<li>值传递</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a=<span class="number">1</span>;</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;父作用域的a的内存位置：&quot;</span>&lt;&lt;&amp;a&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">int</span> girls =<span class="number">3</span>,boys=<span class="number">4</span>; </span><br><span class="line">    <span class="keyword">auto</span> totalChild = [a](<span class="keyword">int</span> x,<span class="keyword">int</span> y)-&gt;<span class="keyword">int</span>&#123;</span><br><span class="line">    	cout&lt;&lt;<span class="string">&quot;lambda作用域中a的内存位置：&quot;</span>&lt;&lt;&amp;a&lt;&lt;endl;</span><br><span class="line">        <span class="keyword">return</span> x+y+a;</span><br><span class="line">    &#125;;</span><br><span class="line">    cout&lt;&lt;<span class="built_in">totalChild</span>(girls,boys)&lt;&lt;endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于父作用域的局部变量a，它存在栈中，lambda值捕获的a也在栈中，其内存地址在boys后面分配，就像是新定义的局部变量</p>
+<ol start="2">
+<li>引用传递</li>
+</ol>
+<p>引用传递地址肯定是不变的，父作用域什么地址，lambda表达式中也是一样的地址</p>
+<h4 id="3-与函数指针的区别是什么？"><a href="#3-与函数指针的区别是什么？" class="headerlink" title="3. 与函数指针的区别是什么？"></a>3. 与函数指针的区别是什么？</h4><h4 id="lambda表达式内部无法修改值传递的值，因为lambda表达式内部仿函数实现时，-重载函数默认是const的"><a href="#lambda表达式内部无法修改值传递的值，因为lambda表达式内部仿函数实现时，-重载函数默认是const的" class="headerlink" title="lambda表达式内部无法修改值传递的值，因为lambda表达式内部仿函数实现时，()重载函数默认是const的"></a>lambda表达式内部无法修改<u>值传递</u>的值，因为lambda表达式内部仿函数实现时，()重载函数默认是<code>const</code>的</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;父作用域的a的内存位置：&quot;</span> &lt;&lt; &amp;a &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">int</span> girls = <span class="number">3</span>, boys = <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">auto</span> totalChild = [a](<span class="keyword">int</span> x, <span class="keyword">int</span> y)-&gt;<span class="keyword">int</span> &#123;</span><br><span class="line">        a = <span class="number">2</span>; <span class="comment">//编译器报错，表达式不是可修改的左值</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;lambda作用域中a的内存位置：&quot;</span> &lt;&lt; &amp;a &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">return</span> x + y + a;</span><br><span class="line">    &#125;;</span><br><span class="line">    cout &lt;&lt; <span class="built_in">totalChild</span>(girls, boys) &lt;&lt; endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果要修改，需要加<code>mutable</code>取消()重载函数的常量性</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> totalChild = [a](<span class="keyword">int</span> x, <span class="keyword">int</span> y)<span class="keyword">mutable</span>-&gt;<span class="keyword">int</span> &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="lambda表达式是不能赋值的"><a href="#lambda表达式是不能赋值的" class="headerlink" title="lambda表达式是不能赋值的"></a>lambda表达式是不能赋值的</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> a = [] &#123; cout &lt;&lt; <span class="string">&quot;A&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line"><span class="keyword">auto</span> b = [] &#123; cout &lt;&lt; <span class="string">&quot;B&quot;</span> &lt;&lt; endl; &#125;;</span><br><span class="line">a = b;   <span class="comment">// 非法，lambda无法赋值</span></span><br><span class="line"><span class="keyword">auto</span> c = a;   <span class="comment">// 合法，生成一个副本</span></span><br></pre></td></tr></table></figure>
+
+<p>a、b的类型都是<code>lambda []void()-&gt;void</code>，但是不能赋值，因为lambda表达式内部实现禁用了赋值运算符（=delete）。但是没有禁用拷贝构造函数，所以可以用一个lambda表达式去初始化另一个lambda表达式</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++11/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">
+    <time datetime="2022-09-12T01:41:00.675Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++11/初始化列表" class="post-C++/C++11/初始化列表 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++11/%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8/" data-id="cl829mimv001gssv57v4r6xhx" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>成员初始化的顺序不是初始化列表中的顺序，而是按照成员在类中声明的顺序</p>
+<p>类中的<strong>引用</strong>和<strong>const</strong>成员变量必须放到初始化列表中进行初始化，不能放到构造函数体中进行“赋值”</p>
+<p>因为赋值和初始化是不同的，构造函数体中是先开辟空间，然后进行赋值。而初始化列表中开辟内存和初始化是同时进行的</p>
+<p>引用和const都是不能被赋值的，所以只能放到初始化列表中 </p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++11/%E5%88%9D%E5%A7%8B%E5%8C%96%E5%88%97%E8%A1%A8/">
+    <time datetime="2022-09-12T01:41:00.675Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++11/智能指针" class="post-C++/C++11/智能指针 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++11/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" data-id="cl829mimx001kssv5eill0s5j" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h3 id="1-三种智能指针"><a href="#1-三种智能指针" class="headerlink" title="1. 三种智能指针"></a>1. 三种智能指针</h3><p><code>shared_ptr</code>允许多个指针指向同一个对象</p>
+<p><code>unique_ptr</code>独占所指向的对象</p>
+<p><code>weak_ptr</code>是一种弱引用</p>
+<p>这三种类型都定义在<code>memory</code>头文件</p>
+<p>类似于<code>vector</code>，智能指针也是模板，需要在<strong>尖括号</strong>中提供“指针可以指向的类型”信息</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shared_ptr&lt;string&gt; p1;</span><br><span class="line">shared_ptr&lt;list&lt;<span class="keyword">int</span>&gt;&gt; p2;</span><br></pre></td></tr></table></figure>
+
+<p>默认初始化的智能指针中保存着一个空指针，解引用一个智能指针返回它所指向的对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(p1 &amp;&amp; p1-&gt;<span class="built_in">empty</span>())   <span class="comment">// 判断 p1 是不是空（指向一个空指针），如果 p1 不为空，则它指向一个 string，调用 string 的 empty 函数判断这个 string 是不是个空字符串</span></span><br><span class="line">    *p1 = <span class="string">&quot;hi&quot;</span>;   <span class="comment">// 如果 p1 指向一个空字符串，则解引用 p1，将一个新值赋予 p1</span></span><br></pre></td></tr></table></figure>
+
+<p><code>shared_ptr</code>和<code>unique_ptr</code>都支持的操作（表12.1）：</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211221163543360.png" alt="image-20211221163543360"></p>
+<p><code>shared_ptr</code>独有的操作（表12.2）：</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211221163802706.png" alt="image-20211221163802706"></p>
+<h3 id="2-make-shared函数"><a href="#2-make-shared函数" class="headerlink" title="2. make_shared函数"></a>2. <code>make_shared</code>函数</h3><p>此函数在动态内存中分配一个对象并初始化它，<u>返回指向此对象的<code>shared_ptr</code></u>，<code>make_shared</code>同样定义在<code>memory</code>头文件中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">shared_ptr&lt;<span class="keyword">int</span>&gt; p3 = make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>);   <span class="comment">// 指向一个值为 42 的 int 的 shared_ptr</span></span><br><span class="line">shared_ptr&lt;string&gt; p4 = make_shared&lt;string&gt;(<span class="number">10</span>, <span class="string">&#x27;9&#x27;</span>);  <span class="comment">// p4 指向一个值为&quot;999999999&quot;的string</span></span><br><span class="line">shared_ptr&lt;<span class="keyword">int</span>&gt; p5 = make_shared&lt;<span class="keyword">int</span>&gt;(); 			   <span class="comment">// p5 指向一个值初始化的int</span></span><br></pre></td></tr></table></figure>
+
+<p>类似于顺序容器的<code>emplace</code>，<code>make_shared</code>用它的参数来<strong>构造</strong>给定类型的对象，例如，调用<code>make_shared&lt;string&gt;</code>时传递的参数必须与<code>string</code>的某个构造函数相匹配，如果不传递参数，就会<strong>值初始化</strong></p>
+<p>利用<code>auto</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> p6 = make_shared&lt;vector&lt;string&gt;&gt;();		<span class="comment">// p6指向一个动态分配的空vector&lt;string&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-和new结合使用"><a href="#3-和new结合使用" class="headerlink" title="3. 和new结合使用"></a>3. 和<code>new</code>结合使用</h3><p>可以用 <code>new</code> 返回的指针来初始化智能指针</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">shared_ptr&lt;<span class="keyword">int</span>&gt; <span class="title">p2</span><span class="params">(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">42</span>))</span></span>;   				<span class="comment">// p2 指向一个值为 42 的 int</span></span><br></pre></td></tr></table></figure>
+
+<p> 接受指针参数的智能指针的构造函数是 explicit 的，因此，<strong>不能</strong>将一个<strong>内置指针隐式转换</strong>为一个智能指针，必须使用<strong>直接初始化</strong>形式来初始化一个智能指针</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">shared_ptr&lt;<span class="keyword">int</span>&gt; p1 = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(<span class="number">1024</span>); 			<span class="comment">// 错误，无法隐式转换，必须使用直接初始化的形式</span></span><br><span class="line"><span class="function">shared_ptr&lt;<span class="keyword">int</span>&gt; <span class="title">p2</span><span class="params">(<span class="keyword">new</span> <span class="keyword">int</span>(<span class="number">1024</span>))</span></span>;				<span class="comment">// 正确，直接初始化</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">shared_ptr&lt;<span class="keyword">int</span>&gt; <span class="title">clone</span><span class="params">(<span class="keyword">int</span> p)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(p);							<span class="comment">// 错误，不能隐式转换</span></span><br><span class="line">    <span class="keyword">return</span> shared_ptr&lt;<span class="keyword">int</span>&gt;(<span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(p));			<span class="comment">// 正确</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-shared-ptr的引用计数"><a href="#4-shared-ptr的引用计数" class="headerlink" title="4. shared_ptr的引用计数"></a>4. shared_ptr的引用计数</h3><p>每个 <code>shared_ptr</code> 都有一个关联的计数器，无论何时我们<strong>拷贝</strong>一个 <code>shared_ptr</code>，计数器都会递增。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> p = make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>); 				<span class="comment">// p 指向的对象只有 p 一个引用者</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">q</span><span class="params">(p)</span></span>;									<span class="comment">// p 和 q 指向相同的对象，此对象有两个引用者</span></span><br></pre></td></tr></table></figure>
+
+<p>这三种情况都会使计数器<strong>递增</strong>：</p>
+<ol>
+<li>用一个 <code>shared_ptr</code> 初始化另一个 <code>shared_ptr</code></li>
+<li>将它作为参数传递给一个函数</li>
+<li>作为函数的返回值</li>
+</ol>
+<p>当我们给 <code>shared_ptr</code> 赋予一个新值，或是 <code>shared_ptr</code> 被销毁，计数器就会<strong>递减</strong></p>
+<p>一旦一个 <code>shared_ptr</code> 的计数器变为 0，它就会<strong>自动释放</strong>自己所管理的对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> r = make_shared&lt;<span class="keyword">int</span>&gt;(<span class="number">42</span>);  		<span class="comment">// r 指向的 int 只有一个引用者</span></span><br><span class="line">r = q; 									<span class="comment">// 递减 r 原来指向的对象的引用计数，r 原来所指向的对象已经没有引用者，会自动释放</span></span><br><span class="line">										<span class="comment">// 递增 q 指向的对象的引用计数</span></span><br></pre></td></tr></table></figure>
+
+<p><code>shared_ptr</code> 常用成员函数：</p>
+<ul>
+<li>use_count()</li>
+<li>reset()</li>
+<li>release()</li>
+</ul>
+<h3 id="5-weak-ptr"><a href="#5-weak-ptr" class="headerlink" title="5. weak_ptr"></a>5. weak_ptr</h3><p><code>weak_ptr</code> 用来解决 <code>shared_ptr</code> 相互引用时的死锁问题，如果两个 <code>shared_ptr</code> 相互引用，那么这两个指针的引用计数永远不可能下降为 0，资源永远不会释放</p>
+<p><code>weak_ptr</code> 是对对象的一种弱引用，不会增加对象的引用计数</p>
+<p>死锁举例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    shared_ptr&lt;B&gt; pb_;</span><br><span class="line">    ~<span class="built_in">A</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;A delete\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    shared_ptr&lt;A&gt; pa_;</span><br><span class="line">    ~<span class="built_in">B</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        cout&lt;&lt;<span class="string">&quot;B delete\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">shared_ptr&lt;B&gt; <span class="title">pb</span><span class="params">(<span class="keyword">new</span> B())</span></span>;    <span class="comment">// 指向 B 的智能指针</span></span><br><span class="line">    <span class="function">shared_ptr&lt;A&gt; <span class="title">pa</span><span class="params">(<span class="keyword">new</span> A())</span></span>;	  <span class="comment">// 指向 A 的智能指针</span></span><br><span class="line">    pb-&gt;pa_ = pa;</span><br><span class="line">    pa-&gt;pb_ = pb;</span><br><span class="line">    cout&lt;&lt;pb.<span class="built_in">use_count</span>()&lt;&lt;endl;</span><br><span class="line">    cout&lt;&lt;pa.<span class="built_in">use_count</span>()&lt;&lt;endl;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">fun</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211225170641418.png" alt="image-20211225170641418"></p>
+<p><code>fun</code> 函数中 <code>pa</code>，<code>pb</code> 之间互相引用，两个资源的引用计数为 <code>2</code>，当要跳出函数时，智能指针 <code>pa</code>，<code>pb</code> 析构时两个资源引用计数会减一，但是两者引用计数还是为 <code>1</code>，导致跳出函数时资源没有被释放（A，B的析构函数没有被调用），如果把其中一个改为 <code>weak_ptr</code> 就可以了，我们把类 A 里面的 <code>shared_ptr&lt;B&gt; pb_ ;</code> 改为 <code>weak_ptr&lt;B&gt; pb_;</code> </p>
+<p>这样的话，资源 B 的引用开始就只有 1，当 <code>pb</code> 析构时，B 的计数变为 0，B 得到释放，B 释放的同时也会使 A 的计数减一，同时 pa 析构时使 A 的计数减一，那么 A 的计数为0，A 得到释放。</p>
+<h3 id="6-简单实现一个-shared-ptr"><a href="#6-简单实现一个-shared-ptr" class="headerlink" title="6. 简单实现一个 shared_ptr"></a>6. 简单实现一个 <code>shared_ptr</code></h3>
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++11/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">
+    <time datetime="2022-09-12T01:41:00.675Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/C++11/移动语义" class="post-C++/C++11/移动语义 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++11/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" data-id="cl829mimy001pssv5ffhphw0c" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h1 id="1-C-移动语义的前世今生"><a href="#1-C-移动语义的前世今生" class="headerlink" title="1. C++移动语义的前世今生"></a>1. C++移动语义的前世今生</h1><h2 id="1-1-浅拷贝与深拷贝"><a href="#1-1-浅拷贝与深拷贝" class="headerlink" title="1.1 浅拷贝与深拷贝"></a>1.1 浅拷贝与深拷贝</h2><p>深拷贝可以解决浅拷贝中会产生的悬挂指针的问题，但也增大了开销。默认的拷贝构造函数执行的是浅拷贝，需要自己实现深拷贝的拷贝构造函数。</p>
+<h2 id="1-2-临时对象"><a href="#1-2-临时对象" class="headerlink" title="1.2 临时对象"></a>1.2 临时对象</h2><p>在某些情况下，一些依赖于深拷贝的临时对象的产生与销毁会带来一些不必要的开销，为了解决这个问题，引入移动语义</p>
+<h2 id="1-3-左值、右值与右值引用"><a href="#1-3-左值、右值与右值引用" class="headerlink" title="1.3 左值、右值与右值引用"></a>1.3 左值、右值与右值引用</h2><p>左值：有名字，能取地址</p>
+<p>右值：没有名字，没有地址，一些临时量，lambda表达式</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/6FED5766DA66F67A18C061E3A45686DF.png" alt="6FED5766DA66F67A18C061E3A45686DF"></p>
+<h2 id="1-4-std-move"><a href="#1-4-std-move" class="headerlink" title="1.4 std::move"></a>1.4 std::move</h2><p>面试题：移动语义是先浅拷贝，再将被拷贝过的指针置空，如果是这样的话，那么仅仅定义一个普通的函数也可以做到这一点（先浅拷贝指针，然后再将被拷贝过的指针置空），那么移动语义存在的意义是什么？</p>
+<blockquote>
+<p>为什么要将源对象的指针置空？</p>
+<p>要防止源对象析构时对其指针进行delete操作把移动后的不属于它的资源给释放掉了</p>
+</blockquote>
+<p>首先，移动语义要解决的问题是<u>临时对象的重复拷贝、销毁所带来的额外开销</u>，所以其函数参数是<u>右值引用</u>，仅接受右值作为传入参数，而是拷贝构造函数的常量左值引用</p>
+<blockquote>
+<p>拷贝构造函数和移动构造函数同时存在的话，如果参数为右值，将会优先调用移动构造函数</p>
+</blockquote>
+<p><u>常量左值引用可以接受右值（临时对象），可以实现这个移动语义</u>。但如果把拷贝构造函数实现为移动语义就相当于所有（临时/非临时）资源都会进行移动，而非深拷贝，这完全消灭了深拷贝。深拷贝时，对新分配的内存空间进行操作不会影响到源内存空间，这是移动语义做不到的，所以不能完全消灭深拷贝</p>
+<p>移动构造函数只接受非常量右值，对临时资源的移动是需要的，但是对于非临时资源，深拷贝是需要的</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++11/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/">
+    <time datetime="2022-09-12T01:41:00.675Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C#/ref和out" class="post-C#/ref和out post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C#/ref%E5%92%8Cout/" data-id="cl829mimc0005ssv5b1a682s4" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h4 id="1-ref-和-out"><a href="#1-ref-和-out" class="headerlink" title="1. ref 和 out"></a>1. ref 和 out</h4><p>ref关键字通过引用传递变量，在声明方法和调用方法时，都要加ref关键字，变量传递给方法之前必须先做初始化</p>
+<p>使用out关键字可以实现让方法返回多个值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static bool TryParse(string s, out int result);</span><br></pre></td></tr></table></figure>
+
+<p>TryParse的返回值有一个bool值，指明解析是否成功，如果解析成功，还会有第二个返回值，即解析的结果result</p>
+<p>result在传递给方法之前不需要预先初始化</p>
+<p>和ref类似，在声明方法和调用方法时都要加out</p>
+<blockquote>
+<p>这里的out int result也是引用传递，但是ref和out的应用场景是不一样的，<strong>ref</strong> 用在需要传引用时，<strong>out</strong> 用在需要返回多个值时</p>
+</blockquote>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C#/ref%E5%92%8Cout/">
+    <time datetime="2022-09-12T01:41:00.674Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C#/delegate委托" class="post-C#/delegate委托 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C#/delegate%E5%A7%94%E6%89%98/" data-id="cl829mime000bssv55188dsxz" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C#/delegate%E5%A7%94%E6%89%98/">
+    <time datetime="2022-09-12T01:41:00.674Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-数据结构与算法、/排序/快速排序" class="post-数据结构与算法、/排序/快速排序 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2022/01/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E6%8E%92%E5%BA%8F/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/">快速排序</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/01/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E6%8E%92%E5%BA%8F/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" data-id="cl829mims0019ssv5f3ghd5fo" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h4 id="1、代码示例"><a href="#1、代码示例" class="headerlink" title="1、代码示例"></a>1、代码示例</h4><p>选取第一个元素为枢纽：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; arr, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> temp = arr[i];</span><br><span class="line">    arr[i] = arr[j];</span><br><span class="line">    arr[j] = temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Partition</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; arr, <span class="keyword">int</span> low, <span class="keyword">int</span> high)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> pivot_key = arr[low];</span><br><span class="line">    <span class="keyword">while</span> (low &lt; high) &#123;  <span class="comment">// 当low==high时，arr[high]肯定等于arr[low]，即pivot_key，high一定--，然后low就大于high了，此时一定得退出循环，所以low==high和low&gt;high都得退出循环，所以while的表达式中没有等号</span></span><br><span class="line">        <span class="keyword">while</span> (low &lt; high &amp;&amp; arr[high] &gt;= pivot_key <span class="comment">//&gt;= ，多个相同数字在一起符合有序情况，应该跳过所有相同数字</span></span><br><span class="line">            high--;</span><br><span class="line">        <span class="built_in">swap</span>(arr, low, high);</span><br><span class="line">        <span class="keyword">while</span> (low &lt; high &amp;&amp; arr[low] &lt;= pivot_key)</span><br><span class="line">            low++;</span><br><span class="line">        <span class="built_in">swap</span>(arr, low, high);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> low;  <span class="comment">// 返回枢纽位置</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> <span class="built_in">QSort</span>(vector&lt;<span class="keyword">int</span>&gt;&amp; arr, <span class="keyword">int</span> low, <span class="keyword">int</span> high) &#123;</span><br><span class="line">    <span class="keyword">int</span> pivot;</span><br><span class="line">    <span class="keyword">if</span> (low &lt; high) &#123;</span><br><span class="line">        pivot = <span class="built_in">Partition</span>(arr, low, high); <span class="comment">//一次排序结果</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//递归</span></span><br><span class="line">        <span class="built_in">QSort</span>(arr, low, pivot - <span class="number">1</span>);</span><br><span class="line">        <span class="built_in">QSort</span>(arr, pivot + <span class="number">1</span>, high);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、快排时间复杂度分析："><a href="#2、快排时间复杂度分析：" class="headerlink" title="2、快排时间复杂度分析："></a>2、快排时间复杂度分析：</h4><h5 id="2-1-最优情况下："><a href="#2-1-最优情况下：" class="headerlink" title="2.1 最优情况下："></a>2.1 <strong>最优</strong>情况下：</h5><p>每次 Partition 都是一分为二，如果排序 n 个关键字，其递归树深度（应该是完全二叉树）就为：$\lfloor \log_2n\rfloor+n$，仅需递归 $\log_2n$ 次</p>
+<p>而每次扫描一遍，把枢纽值放在正确的位置上，将数组一分为二，需要的时间为 $T(n)$<br>$$<br>T(1)=0\<br>\<br>T(n)&amp;=&amp;2T(n/2)+n\<br>&amp;=&amp;2(2T(n/4)+n/2)+n=4T(n/4)+2n\<br>&amp;=&amp;4(2T(n/8)+n/4)+2n=8T(n/8)+3n\<br>&amp;=&amp;…\<br>&amp;=&amp;nT(1)+(\log_2n)*n=O(nlogn)<br>$$</p>
+<h5 id="2-2-最坏情况下："><a href="#2-2-最坏情况下：" class="headerlink" title="2.2 最坏情况下："></a>2.2 最坏情况下：</h5><p>待排序的序列为正序或逆序，每次划分只得到一个比上一次划分少一个记录的子序列，另一半为空</p>
+<p>递归树为一颗斜树，需要 n-1 次递归调用</p>
+<p>且第 i 次划分需要经过 n-i 次关键字的比较，总比较次数为<br>$$<br>\sum\limits_{i=1}^{n-1}(n-i)=\frac{n(n-1)}{2}<br>$$<br>所以最坏情况下的时间复杂度为：$O(n^2)$</p>
+<blockquote>
+<p>不用再纠结<u>递归次数</u>，因为算<u>比较次数</u>的时候，已经把<u>递归次数</u>考虑进去了，算了 n-1 次<u>比较次数</u>（求和函数是从 1 到 n-1），也就是每次递归计算<u>比较次数</u></p>
+</blockquote>
+<h5 id="2-3平均情况下"><a href="#2-3平均情况下" class="headerlink" title="2.3平均情况下"></a>2.3平均情况下</h5><p>也是$O(n\log n)$，原因先挖坑以后再解释【坑】（<a target="_blank" rel="noopener" href="https://blog.csdn.net/weshjiness/article/details/8660583%EF%BC%89">https://blog.csdn.net/weshjiness/article/details/8660583）</a></p>
+<h4 id="3、快排空间复杂度分析："><a href="#3、快排空间复杂度分析：" class="headerlink" title="3、快排空间复杂度分析："></a>3、快排空间复杂度分析：</h4><p>主要是递归造成的栈空间的使用</p>
+<p>最好、平均情况下，栈空间的使用为 $\log_2n$，其空间复杂度为 $O(logn)$</p>
+<p>最坏情况下：需要进行 n-1 次递归，空间复杂度为 $O(n)$</p>
+<h4 id="4、快排稳定性"><a href="#4、快排稳定性" class="headerlink" title="4、快排稳定性"></a>4、快排稳定性</h4><p>由于关键字的比较和交换是跳跃进行的，所以快排是<strong>不稳定</strong>的</p>
+<h4 id="5-题目"><a href="#5-题目" class="headerlink" title="5. 题目"></a>5. 题目</h4><p><a target="_blank" rel="noopener" href="https://www.nowcoder.com/questionTerminal/69fc9122a0a74b5f8e011c4f53419dd3">https://www.nowcoder.com/questionTerminal/69fc9122a0a74b5f8e011c4f53419dd3</a></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/01/11/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E6%8E%92%E5%BA%8F/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/">
+    <time datetime="2022-01-11T13:36:53.000Z" class="entry-date">
+        2022-01-11
+    </time>
+</a>
+    
+  <span class="article-delim">&#8226;</span>
+  <div class="article-category">
+  <a class="article-category-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a>
+  </div>
+
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-英语/名词性从句/主语从句" class="post-英语/名词性从句/主语从句 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        
+  
+    <h1 class="entry-title">
+      <a class="article-title" href="/2022/01/04/%E8%8B%B1%E8%AF%AD/%E5%90%8D%E8%AF%8D%E6%80%A7%E4%BB%8E%E5%8F%A5/%E4%B8%BB%E8%AF%AD%E4%BB%8E%E5%8F%A5/">主语从句</a>
+    </h1>
+  
+
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/01/04/%E8%8B%B1%E8%AF%AD/%E5%90%8D%E8%AF%8D%E6%80%A7%E4%BB%8E%E5%8F%A5/%E4%B8%BB%E8%AF%AD%E4%BB%8E%E5%8F%A5/" data-id="cl829mimt001bssv5hvkj11l4" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h2 id="1-三种类型的主语从句"><a href="#1-三种类型的主语从句" class="headerlink" title="1. 三种类型的主语从句"></a>1. 三种类型的主语从句</h2><h6 id="1-由-that-引导的主语从句"><a href="#1-由-that-引导的主语从句" class="headerlink" title="(1) 由 that 引导的主语从句"></a>(1) 由 <code>that</code> 引导的主语从句</h6><p>​    <u>That</u> he hasn’t arrived is odd.</p>
+<p>​    It’s certain <u>that</u> prices will go up.</p>
+<h6 id="2-由连接代（副）词引导的主语从句"><a href="#2-由连接代（副）词引导的主语从句" class="headerlink" title="(2) 由连接代（副）词引导的主语从句"></a>(2) 由<u>连接代（副）词</u>引导的主语从句</h6><p><u>    Why</u> he left wasn’t Important.</p>
+<p><u>    It</u> was uncertain <u>whether</u> he would come or not.</p>
+<h6 id="3-由关系代词型和-what-和-whatever-引导的从句："><a href="#3-由关系代词型和-what-和-whatever-引导的从句：" class="headerlink" title="(3) 由关系代词型和 what 和 whatever 引导的从句："></a>(3) 由关系代词型和 <u>what</u> 和 <u>whatever</u> 引导的从句：</h6><p><u>    What I want</u> is a canvas travelling bag.</p>
+<p><u>    Whatever she did</u> was right.</p>
+<h2 id="2-由-that-引导的主语从句"><a href="#2-由-that-引导的主语从句" class="headerlink" title="2. 由 that 引导的主语从句"></a>2. 由 that 引导的主语从句</h2><p>一般都用 <code>it</code> 作形式主语</p>
+<h6 id="a-it-be-形容词-that-从句"><a href="#a-it-be-形容词-that-从句" class="headerlink" title="a. it + be + 形容词 + that 从句"></a>a. it + be + 形容词 + that 从句</h6><p><u>It</u> is natural <u>that</u> they should have different views.</p>
+<p><u>It</u> was quite plain <u>that</u> she didn’t want to come.</p>
+<h6 id="b-it-be-名词-that-从句"><a href="#b-it-be-名词-that-从句" class="headerlink" title="b. it + be + 名词 + that 从句"></a>b. it + be + 名词 + that 从句</h6><p><u>It’s</u> a pity (<u>that</u>) he can’t swim.</p>
+<h6 id="c-it-动词-（宾、状）-that"><a href="#c-it-动词-（宾、状）-that" class="headerlink" title="c. it + 动词 + （宾、状） + that"></a>c. it + 动词 + （宾、状） + that</h6><p><u>It happened that</u> she wasn’t in that day. ( happen 这里不及物，碰巧那天她不在家 )</p>
+<p><u>It</u> never occurred to me <u>that</u> perhaps she was lying.</p>
+<p><u>It</u> seems <u>that</u> you are right.</p>
+<p><u>It</u> struck me <u>that</u> we ought to make a new plan.</p>
+<h6 id="d-it-动词的被动语态-that-从句"><a href="#d-it-动词的被动语态-that-从句" class="headerlink" title="d. it + 动词的被动语态 + that 从句"></a>d. it + 动词的被动语态 + that 从句</h6><p><u>It</u> was rumoured <u>that</u> he was suffering from a stone in the kidney.</p>
+<p><u>It</u> is estimated <u>that</u> 25 million school lunches are sold each day.  </p>
+<h6 id="在口语中-that-有时可以省略"><a href="#在口语中-that-有时可以省略" class="headerlink" title="在口语中 that 有时可以省略"></a>在口语中 <code>that</code> 有时可以省略</h6><p>It was clear his words pleased her.</p>
+<p>It strikes me Kent is a nice lad.</p>
+<h2 id="3-由连接代（副）词引导的主语从句"><a href="#3-由连接代（副）词引导的主语从句" class="headerlink" title="3. 由连接代（副）词引导的主语从句"></a>3. 由连接代（副）词引导的主语从句</h2><p>可放句首，不用 it：</p>
+<p><u>When he’ll be back</u> depends much on the weather.</p>
+<p><u>How it was done</u> was a mystery.</p>
+<p><u>Who is to be sent there</u> hasn’t been decided. </p>
+<p><u>Whether we’ll succeed</u> remains to be seen.</p>
+<p>一般用 it 作形式主语</p>
+<h6 id="a-it-be-形容词-从句"><a href="#a-it-be-形容词-从句" class="headerlink" title="a. it + be + 形容词 + 从句"></a>a. it + be + 形容词 + 从句</h6><p><u>It</u> was not clear to me <u>why</u> he behaved like that.</p>
+<p><u>It’s</u> uncertain <u>whether</u> the game will be held.</p>
+<p><u>It</u> is amazing <u>that</u> he should have said nothing about the murder.</p>
+<h6 id="b-it-be-名词-从句"><a href="#b-it-be-名词-从句" class="headerlink" title="b. it + be + 名词 + 从句"></a>b. it + be + 名词 + 从句</h6><p><u>It’s</u> a puzzle <u>how</u> life began.</p>
+<p><u>It</u> was a question <u>whether</u> he should get married.</p>
+<h6 id="c-it-动词-（宾语、状语）-从句"><a href="#c-it-动词-（宾语、状语）-从句" class="headerlink" title="c. it + 动词 （宾语、状语）+ 从句"></a>c. it + 动词 （宾语、状语）+ 从句</h6><p><u>It</u> doesn’t matter much <u>where</u> we live.</p>
+<p><u>It</u> struck her <u>how</u> considerate he was.</p>
+<h6 id="d-it-动词被动语态-从句"><a href="#d-it-动词被动语态-从句" class="headerlink" title="d. it + 动词被动语态 + 从句"></a>d. it + 动词被动语态 + 从句</h6><p><u>It</u> is not decided <u>who</u> will edit it.</p>
+<h2 id="4-由关系代词型-what-引导的主语从句"><a href="#4-由关系代词型-what-引导的主语从句" class="headerlink" title="4. 由关系代词型 what 引导的主语从句"></a>4. 由关系代词型 what 引导的主语从句</h2><p><u>What is over</u> is over.</p>
+<p><u>What you should do</u> is to choose a company to invest in.</p>
+<p><u>Whoever wants to go</u> may sign up here.</p>
+<p><u>Whichever you want</u> is yours.</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/01/04/%E8%8B%B1%E8%AF%AD/%E5%90%8D%E8%AF%8D%E6%80%A7%E4%BB%8E%E5%8F%A5/%E4%B8%BB%E8%AF%AD%E4%BB%8E%E5%8F%A5/">
+    <time datetime="2022-01-04T09:02:03.000Z" class="entry-date">
+        2022-01-04
+    </time>
+</a>
+    
+  <span class="article-delim">&#8226;</span>
+  <div class="article-category">
+  <a class="article-category-link" href="/categories/English/">English</a>
+  </div>
+
+    
+  <span class="article-delim">&#8226;</span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a></li></ul>
+
+    </footer>
+</article>
+
+
+
+
+
+
+  
+  
+    <nav id="pagination">
+      <nav id="page-nav">
+        <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">Next &amp;raquo;</a>
+      </nav>
+    </nav>
+  
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

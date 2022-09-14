@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. C++移动语义的前世今生1.1 浅拷贝与深拷贝深拷贝可以解决浅拷贝中会产生的悬挂指针的问题，但也增大了开销。默认的拷贝构造函数执行的是浅拷贝，需要自己实现深拷贝的拷贝构造函数。 1.2 临时对象在某些情况下，一些依赖于深拷贝的临时对象的产生与销毁会带来一些不必要的开销，为了解决这个问题，引入移动语义 1.3 左值、右值与右值引用左值：有名字，能取地址 右值：没有名字，没有地址，一些临时量，l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/2022/09/12/C++/C++11/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="1. C++移动语义的前世今生1.1 浅拷贝与深拷贝深拷贝可以解决浅拷贝中会产生的悬挂指针的问题，但也增大了开销。默认的拷贝构造函数执行的是浅拷贝，需要自己实现深拷贝的拷贝构造函数。 1.2 临时对象在某些情况下，一些依赖于深拷贝的临时对象的产生与销毁会带来一些不必要的开销，为了解决这个问题，引入移动语义 1.3 左值、右值与右值引用左值：有名字，能取地址 右值：没有名字，没有地址，一些临时量，l">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/6FED5766DA66F67A18C061E3A45686DF.png">
+<meta property="article:published_time" content="2022-09-12T01:41:00.675Z">
+<meta property="article:modified_time" content="2022-09-12T01:41:00.675Z">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/6FED5766DA66F67A18C061E3A45686DF.png">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-C++/C++11/移动语义" class="post-C++/C++11/移动语义 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/C++11/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/" data-id="cl829mimy001pssv5ffhphw0c" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h1 id="1-C-移动语义的前世今生"><a href="#1-C-移动语义的前世今生" class="headerlink" title="1. C++移动语义的前世今生"></a>1. C++移动语义的前世今生</h1><h2 id="1-1-浅拷贝与深拷贝"><a href="#1-1-浅拷贝与深拷贝" class="headerlink" title="1.1 浅拷贝与深拷贝"></a>1.1 浅拷贝与深拷贝</h2><p>深拷贝可以解决浅拷贝中会产生的悬挂指针的问题，但也增大了开销。默认的拷贝构造函数执行的是浅拷贝，需要自己实现深拷贝的拷贝构造函数。</p>
+<h2 id="1-2-临时对象"><a href="#1-2-临时对象" class="headerlink" title="1.2 临时对象"></a>1.2 临时对象</h2><p>在某些情况下，一些依赖于深拷贝的临时对象的产生与销毁会带来一些不必要的开销，为了解决这个问题，引入移动语义</p>
+<h2 id="1-3-左值、右值与右值引用"><a href="#1-3-左值、右值与右值引用" class="headerlink" title="1.3 左值、右值与右值引用"></a>1.3 左值、右值与右值引用</h2><p>左值：有名字，能取地址</p>
+<p>右值：没有名字，没有地址，一些临时量，lambda表达式</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/6FED5766DA66F67A18C061E3A45686DF.png" alt="6FED5766DA66F67A18C061E3A45686DF"></p>
+<h2 id="1-4-std-move"><a href="#1-4-std-move" class="headerlink" title="1.4 std::move"></a>1.4 std::move</h2><p>面试题：移动语义是先浅拷贝，再将被拷贝过的指针置空，如果是这样的话，那么仅仅定义一个普通的函数也可以做到这一点（先浅拷贝指针，然后再将被拷贝过的指针置空），那么移动语义存在的意义是什么？</p>
+<blockquote>
+<p>为什么要将源对象的指针置空？</p>
+<p>要防止源对象析构时对其指针进行delete操作把移动后的不属于它的资源给释放掉了</p>
+</blockquote>
+<p>首先，移动语义要解决的问题是<u>临时对象的重复拷贝、销毁所带来的额外开销</u>，所以其函数参数是<u>右值引用</u>，仅接受右值作为传入参数，而是拷贝构造函数的常量左值引用</p>
+<blockquote>
+<p>拷贝构造函数和移动构造函数同时存在的话，如果参数为右值，将会优先调用移动构造函数</p>
+</blockquote>
+<p><u>常量左值引用可以接受右值（临时对象），可以实现这个移动语义</u>。但如果把拷贝构造函数实现为移动语义就相当于所有（临时/非临时）资源都会进行移动，而非深拷贝，这完全消灭了深拷贝。深拷贝时，对新分配的内存空间进行操作不会影响到源内存空间，这是移动语义做不到的，所以不能完全消灭深拷贝</p>
+<p>移动构造函数只接受非常量右值，对临时资源的移动是需要的，但是对于非临时资源，深拷贝是需要的</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/C++11/%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89/">
+    <time datetime="2022-09-12T01:41:00.675Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2022/09/12/C++/C++11/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" rel="prev"><span class="meta-nav">←</span> (no title)</a></span>
+    
+    
+        <span class="nav-next"><a href="/2022/09/12/C#/ref%E5%92%8Cout/" rel="next">(no title) <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

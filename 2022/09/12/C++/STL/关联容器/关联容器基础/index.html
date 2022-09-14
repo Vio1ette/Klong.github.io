@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="关联容器(map, set, pair)1. 定义 空容器（调用默认构造函数）  12map&lt;string, size_t&gt; mp; set&lt;string&gt; st;    列表初始化  12set&lt;string&gt; st &#x3D; &amp;#123;&quot;aaa&quot;,&quot;bbb&quot;&amp;#125;;map&lt;string, string&amp;gt">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/2022/09/12/C++/STL/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="关联容器(map, set, pair)1. 定义 空容器（调用默认构造函数）  12map&lt;string, size_t&gt; mp; set&lt;string&gt; st;    列表初始化  12set&lt;string&gt; st &#x3D; &amp;#123;&quot;aaa&quot;,&quot;bbb&quot;&amp;#125;;map&lt;string, string&amp;gt">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113101831838.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220402155957813.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113111113342.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113111754675.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113112310777.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113112230892.png">
+<meta property="article:published_time" content="2022-09-12T01:41:00.678Z">
+<meta property="article:modified_time" content="2022-09-12T01:41:00.678Z">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113101831838.png">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main"><article id="post-C++/STL/关联容器/关联容器基础" class="post-C++/STL/关联容器/关联容器基础 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/STL/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%9F%BA%E7%A1%80/" data-id="cl829min8002hssv52pcl70vp" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <hr>
+<hr>
+<h2 id="关联容器-map-set-pair"><a href="#关联容器-map-set-pair" class="headerlink" title="关联容器(map, set, pair)"></a>关联容器(map, set, pair)</h2><h3 id="1-定义"><a href="#1-定义" class="headerlink" title="1. 定义"></a>1. 定义</h3><ul>
+<li><strong>空容器</strong>（调用默认构造函数）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">map&lt;string, <span class="keyword">size_t</span>&gt; mp; </span><br><span class="line">set&lt;string&gt; st; </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>列表初始化</strong></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set&lt;string&gt; st = &#123;<span class="string">&quot;aaa&quot;</span>,<span class="string">&quot;bbb&quot;</span>&#125;;</span><br><span class="line">map&lt;string, string&gt; mp = &#123;&#123;<span class="string">&quot;Joey&quot;</span>,<span class="string">&quot;Phoebe&quot;</span>&#125;,&#123;<span class="string">&quot;Ross&quot;</span>,<span class="string">&quot;Rachel&quot;</span>&#125;&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>迭代器</strong></li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">set&lt;<span class="keyword">int</span>&gt; <span class="title">iset</span><span class="params">(ivec.begin(), ivec.end())</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>也可以将关联容器初始化为另一个同类型容器的<strong>拷贝</strong>【?】</p>
+<p>从一个<strong>值范围</strong>来初始化关联容器，只要这些值能转化为容器所需类型【?】</p>
+<p><strong>值初始化</strong>【?】</p>
+<h3 id="2-pair相关"><a href="#2-pair相关" class="headerlink" title="2. pair相关"></a>2. <strong>pair</strong>相关</h3><ul>
+<li>基础操作</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113101831838.png" alt="pair上的操作"></p>
+<ul>
+<li>返回值类型为 pair（对返回值列表初始化）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">pair&lt;string, <span class="keyword">int</span>&gt; <span class="title">my_fun</span><span class="params">()</span></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> &#123;s1, i1&#125;;</span><br><span class="line">    <span class="keyword">return</span> pair&lt;string, <span class="keyword">int</span>&gt;(); <span class="comment">//构造一个空的 pair</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-关键字、值类型"><a href="#3-关键字、值类型" class="headerlink" title="3. 关键字、值类型"></a>3. 关键字、值类型</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">key_type			<span class="comment">//键类型</span></span><br><span class="line">mapped_type			<span class="comment">//值类型（只适用于map）</span></span><br><span class="line">value_type			<span class="comment">//对set，与key_type相同</span></span><br><span class="line">					<span class="comment">//对map，pair键值对：pair&lt;const key_type, mapped_type&gt;, //注意第一个为const</span></span><br></pre></td></tr></table></figure>
+
+<p>如何使用？：<strong>域运算符</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map&lt;string, <span class="keyword">int</span>&gt;::mapped_type v1;  <span class="comment">//其余类似</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-迭代器"><a href="#4-迭代器" class="headerlink" title="4. 迭代器"></a>4. 迭代器</h3><p>解引用一个关联容器迭代器，会得到一个 <code>value_type</code> 的<strong>引用</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> map_it = mp.<span class="built_in">begin</span>();</span><br><span class="line"><span class="comment">//(*map_it) 是 value_type，一个pair类型的引用</span></span><br><span class="line"><span class="comment">// -&gt; 可以用来解引用</span></span><br><span class="line">map_it-&gt;first   <span class="comment">// 关键字，是const的</span></span><br><span class="line">map_it-&gt;second  <span class="comment">// 值，非const，可以改变</span></span><br><span class="line">++map_it-&gt;second; <span class="comment">// 值自增 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// set 的迭代器是 const 的，set的关键字是只读的</span></span><br><span class="line"><span class="keyword">auto</span> set_it = st.<span class="built_in">begin</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-遍历"><a href="#5-遍历" class="headerlink" title="5. 遍历"></a>5. 遍历</h3><ol>
+<li>用<strong>迭代器</strong>遍历</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> map_it = mp.<span class="built_in">cbegin</span>();</span><br><span class="line"><span class="keyword">while</span>(map_it != mp.<span class="built_in">cend</span>())&#123;</span><br><span class="line">    <span class="comment">// do something with map_it-&gt;first, map_it-&gt;second</span></span><br><span class="line">    ++map_it;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>for each</strong> 语法</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">auto</span> x:mp)&#123;</span><br><span class="line">    <span class="comment">//每一个 x 都是 pair 类型</span></span><br><span class="line">    <span class="comment">//x.first</span></span><br><span class="line">    <span class="comment">//x.second</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-添加元素"><a href="#6-添加元素" class="headerlink" title="6. 添加元素"></a>6. 添加元素</h3><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20220402155957813.png" alt="image-20220402155957813"></p>
+<ol>
+<li>set</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vecrot&lt;<span class="keyword">int</span>&gt; v = &#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">2</span>,<span class="number">5</span>,<span class="number">1</span>&#125;;</span><br><span class="line"></span><br><span class="line">set&lt;<span class="keyword">int</span>&gt; st;</span><br><span class="line">st.<span class="built_in">insert</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>()); <span class="comment">//一对迭代器</span></span><br><span class="line">st.<span class="built_in">insert</span>(&#123;<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>map</li>
+</ol>
+<p><code>insert</code> 一个 <code>pair</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">map&lt;string, <span class="keyword">int</span>&gt; mp;</span><br><span class="line">string word;</span><br><span class="line"></span><br><span class="line">mp.<span class="built_in">insert</span>(&#123;word, <span class="number">1</span>&#125;);  <span class="comment">// 初始化列表构造 pair</span></span><br><span class="line">mp.<span class="built_in">insert</span>(pair&lt;string, <span class="keyword">int</span>&gt;(word, <span class="number">1</span>);  <span class="comment">// pair 没有不带等号的列表初始化</span></span><br><span class="line">mp.<span class="built_in">insert</span>(make_pair&lt;string, <span class="keyword">int</span>&gt;(word, <span class="number">1</span>)); <span class="comment">// make_pair 是一个函数</span></span><br><span class="line">mp.<span class="built_in">insert</span>(map&lt;string, <span class="keyword">int</span>&gt;::<span class="built_in">value_type</span>(word, <span class="number">1</span>)); <span class="comment">//也用小括号来初始化一个 pair</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><code>insert</code> 的返回值</li>
+</ol>
+<ul>
+<li>不重（有添加失败的风险，已存在）</li>
+</ul>
+<p>添加单一元素的 <code>insert</code> 和 <code>emplace</code> 返回一个 pair&lt;迭代器，bool&gt;</p>
+<p><code>迭代器</code>：指向刚添加的元素</p>
+<p><code>bool</code>：如果插入成功（从无到有），返回 <code>true</code>，否则返回 <code>false</code></p>
+<ul>
+<li>可重（没有添加失败的风险）</li>
+</ul>
+<p>multi，<code>insert</code>只返回一个迭代器，指向刚添加的新元素</p>
+<h3 id="7-删除元素"><a href="#7-删除元素" class="headerlink" title="7. 删除元素"></a>7. 删除元素</h3><p>erase</p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113111113342.png" alt="从关联容器删除元素"></p>
+<h3 id="8-特殊的map下标"><a href="#8-特殊的map下标" class="headerlink" title="8. 特殊的map下标"></a>8. 特殊的map下标</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mp[key]==value  <span class="comment">//访问 键key 对应的 value值</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>若 <code>key</code> 不存在，则<strong>插入</strong>，并且将其值进行初始化 <code>value</code></p>
+</li>
+<li><p>只能对 <strong>非const</strong> 的 <code>map</code> 使用下标，因为可能会插入值</p>
+</li>
+<li><p>map 的下标操作返回一个 <strong>mapped_type</strong> 对象，<strong>左值</strong></p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113111754675.png" alt="map的下标操作"></p>
+<h3 id="9-访问、查找元素"><a href="#9-访问、查找元素" class="headerlink" title="9. 访问、查找元素"></a>9. 访问、查找元素</h3><p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113112310777.png" alt="在一个关联容器中查找操作"></p>
+<p><img src="https://raw.githubusercontent.com/Vio1ette/blog-img/main/image-20211113112230892.png" alt="查找"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(mp.<span class="built_in">find</span>(<span class="string">&quot;one key&quot;</span>) == mp.<span class="built_in">end</span>())&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="10-无序容器-unordered-map、unordered-set"><a href="#10-无序容器-unordered-map、unordered-set" class="headerlink" title="10. 无序容器(unordered_map、unordered_set)"></a>10. 无序容器(unordered_map、unordered_set)</h3><p>底层都由<u>哈希表</u>实现，其find和count的时间复杂度为O(1)</p>
+<blockquote>
+<p>在一般情况下，哈希表查找的时间复杂度均摊为O(1) ，但是极端情况下会因为哈希碰撞退化到O(n)</p>
+</blockquote>
+<p>无序容器自定义哈希函数，自定义比较操作符【坑】</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/STL/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8/%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8%E5%9F%BA%E7%A1%80/">
+    <time datetime="2022-09-12T01:41:00.678Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+    
+<nav class="nav-single">
+    <h3 class="assistive-text">文章导航</h3>
+    
+        <span class="nav-previous"><a href="/2022/09/12/C++/STL/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%AF%94%E8%BE%83%E5%99%A8/" rel="prev"><span class="meta-nav">←</span> (no title)</a></span>
+    
+    
+        <span class="nav-next"><a href="/2022/09/12/C++/C++%E5%9F%BA%E7%A1%80/%E5%8F%98%E9%87%8F%E5%A3%B0%E6%98%8E%E3%80%81%E5%AE%9A%E4%B9%89%EF%BC%8Cextern%EF%BC%8C%E5%A4%96%E9%83%A8%E9%93%BE%E6%8E%A5%EF%BC%8C%E5%86%85%E9%83%A8%E9%93%BE%E6%8E%A5%EF%BC%8C%E9%9D%99%E6%80%81%E9%93%BE%E6%8E%A5/" rel="next">(no title) <span class="meta-nav">→</span></a></span>
+    
+</nav><!-- .nav-single -->
+
+
+
+
+
+
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

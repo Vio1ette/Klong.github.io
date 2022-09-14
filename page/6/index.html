@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <meta name="description" content="再勇敢一点，再自信一点" />
+  
+
+  
+  
+  
+  
+  
+  
+  <title>Klong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="再勇敢一点，再自信一点">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Klong&#39;s Blog">
+<meta property="og:url" content="http://example.com/page/6/index.html">
+<meta property="og:site_name" content="Klong&#39;s Blog">
+<meta property="og:description" content="再勇敢一点，再自信一点">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="pano">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="icon" href="/css/images/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  <!-- baidu webmaster push -->
+  <script src='//push.zhanzhang.baidu.com/push.js'></script>
+<meta name="generator" content="Hexo 6.0.0"></head>
+<body class="home blog custom-background custom-font-enabled single-author">
+  <div id="page" class="hfeed site">
+      <header id="masthead" class="site-header" role="banner">
+    <hgroup>
+      <h1 class="site-title">
+        <a href="/" title="Klong&#39;s Blog" rel="home">Klong&#39;s Blog</a>
+      </h1>
+      
+        <h2 class="site-description hitokoto"></h2>
+        <script type="text/javascript" src="https://v1.hitokoto.cn/?encode=js"></script>
+      
+    </hgroup>
+
+    <nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle">菜单</button>
+            <a class="assistive-text" href="/#content" title="跳至内容">跳至内容</a><!--TODO-->
+            <div class="menu-main-container">
+                <ul id="menu-main" class="nav-menu">
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/">Home</a></li>
+                
+                    <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="/archives">Archives</a></li>
+                
+                </ul>
+            </div>
+    </nav>
+</header>
+
+      <div id="main" class="wrapper">
+        <div id="primary" class="site-content"><div id="content" role="main">
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/4. 设计与声明/条款21：必须返回对象时，别妄想返回其reference" class="post-C++/《effective C++ 第三版》读书笔记/4. 设计与声明/条款21：必须返回对象时，别妄想返回其reference post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/4.%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/%E6%9D%A1%E6%AC%BE21%EF%BC%9A%E5%BF%85%E9%A1%BB%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E6%97%B6%EF%BC%8C%E5%88%AB%E5%A6%84%E6%83%B3%E8%BF%94%E5%9B%9E%E5%85%B6reference/" data-id="cl829mina002nssv57thcbiqm" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>考虑一个有理数 class</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Rational</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Rational</span>(<span class="keyword">int</span> numerator = <span class="number">0</span>, <span class="keyword">int</span> denominator = <span class="number">1</span>);</span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> n,d;  <span class="comment">// 分子、分母</span></span><br><span class="line">    <span class="keyword">friend</span> <span class="keyword">const</span> Rational <span class="keyword">operator</span>* (<span class="keyword">const</span> Rational&amp; lhs, <span class="keyword">const</span> Rational&amp; rhs);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>注意 operator* 函数的返回值类型是 const value 类型，这里是否需要返回 reference 以避免临时对象的构造、析构成本呢？</p>
+<p>by reference 传递出来的语义是一个已存在的东西的名称，所以如果要返回 reference 对象，那么这个对象必须在 operator* 函数内部创建出来，因为两个形参都不能作为乘积的结果来返回。</p>
+<ol>
+<li>在 local stack 上创建对象：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Rational&amp; <span class="keyword">operator</span>* (<span class="keyword">const</span> Rational&amp; lhs, <span class="keyword">const</span> Rational&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">Rational <span class="title">result</span><span class="params">(lhs.n * rhs.n, lhs.d * rhs.d)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面这种做法是极其错误的，因为 local 对象在函数结束时已经被销毁了，对这个已死亡对象的 reference 是无意义的</p>
+<ol start="2">
+<li>在 heap 上创建对象：</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Rational&amp; <span class="keyword">operator</span>* (<span class="keyword">const</span> Rational&amp; lhs, <span class="keyword">const</span> Rational&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    Rational* result = <span class="keyword">new</span> <span class="built_in">Rational</span>(lhs.n * rhs.n, lhs.d * rhs.d);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这又会造成不好 delete 的糟糕状况</p>
+<ol start="3">
+<li>定义在函数内部的 static Rational 对象</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Rational&amp; <span class="keyword">operator</span>* (<span class="keyword">const</span> Rational&amp; lhs, <span class="keyword">const</span> Rational&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> Rational result;</span><br><span class="line">    result = ...</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种代码在实际中是不可用的，例如：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">bool</span> <span class="keyword">operator</span>==(<span class="keyword">const</span> Rational&amp; lhs, <span class="keyword">const</span> Rational&amp; rhs);</span><br><span class="line">Rational a,b,c,d;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">if</span>((a*b) == (c*d))&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，表达式 ((a*b) == (c*d)) 永远为真，因为 static 对象只有一份</p>
+<p><strong>综上，绝对不要让函数返回 pointer 或 reference 指向一个 local stack 对象，或 heap-allocated 对象。当返回 local static 对象时，要记住这个对象只有一份</strong></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/4.%20%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%A3%B0%E6%98%8E/%E6%9D%A1%E6%AC%BE21%EF%BC%9A%E5%BF%85%E9%A1%BB%E8%BF%94%E5%9B%9E%E5%AF%B9%E8%B1%A1%E6%97%B6%EF%BC%8C%E5%88%AB%E5%A6%84%E6%83%B3%E8%BF%94%E5%9B%9E%E5%85%B6reference/">
+    <time datetime="2022-09-12T01:41:00.682Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/3. 资源管理/条款13：以对象管理资源-" class="post-C++/《effective C++ 第三版》读书笔记/3. 资源管理/条款13：以对象管理资源- post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/3.%20%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/%E6%9D%A1%E6%AC%BE13%EF%BC%9A%E4%BB%A5%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86%E8%B5%84%E6%BA%90-/" data-id="cl829minb002rssv5hcmk5p1h" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>条款十三：RALL（Resource Acquisition Is Initialization，资源获取时初始化）</p>
+<p>条款十七：在“资源被创建（new）”和“资源被转换为资源管理对象”两个时间点之间有可能发生异常干扰，所以要以独立语句将 newed 对象存储于智能指针内，否则有可能发生资源泄漏</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/3.%20%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/%E6%9D%A1%E6%AC%BE13%EF%BC%9A%E4%BB%A5%E5%AF%B9%E8%B1%A1%E7%AE%A1%E7%90%86%E8%B5%84%E6%BA%90-/">
+    <time datetime="2022-09-12T01:41:00.682Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款 06：若不想使用编译器自动生成的函数，就该明确拒绝" class="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款 06：若不想使用编译器自动生成的函数，就该明确拒绝 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE%2006%EF%BC%9A%E8%8B%A5%E4%B8%8D%E6%83%B3%E4%BD%BF%E7%94%A8%E7%BC%96%E8%AF%91%E5%99%A8%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%8C%E5%B0%B1%E8%AF%A5%E6%98%8E%E7%A1%AE%E6%8B%92%E7%BB%9D/" data-id="cl829mina002qssv52qdt4f3q" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>如何阻止 copy 行为？</p>
+<p>不声明 copy 构造函数、copy assignment 操作符并不能阻止 copy 行为，因为编译器还是会自己创建一个默认的版本。</p>
+<p><u>自行将 copy 构造函数、copy assignment 操作符声明为 private，且不给出它们的定义，</u>这即阻止了编译器产生这些函数的默认版本，又阻止了外部对这些函数的调用。同时当使用 member 函数和 friend 函数调用它们的时候，会得到一个 link 错误，因为它们根本就没有定义！</p>
+<p>Uncopyable函数【挖坑，代填】</p>
+<p>现代C++11可以用<code>delete</code>来阻止一个函数被使用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Magic</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Magic</span>() = <span class="keyword">default</span>;  					<span class="comment">//显示声明使用编译器生成的构造函数</span></span><br><span class="line">    Magic&amp; opeartor=(<span class="keyword">const</span> Magic&amp;) = <span class="keyword">delete</span>;  <span class="comment">//显示声明拒绝编译器生成 copy assignment 操作符</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE%2006%EF%BC%9A%E8%8B%A5%E4%B8%8D%E6%83%B3%E4%BD%BF%E7%94%A8%E7%BC%96%E8%AF%91%E5%99%A8%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%9A%84%E5%87%BD%E6%95%B0%EF%BC%8C%E5%B0%B1%E8%AF%A5%E6%98%8E%E7%A1%AE%E6%8B%92%E7%BB%9D/">
+    <time datetime="2022-09-12T01:41:00.681Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款09：绝不在构造和析构过程中调用 virtual 函数" class="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款09：绝不在构造和析构过程中调用 virtual 函数 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE09%EF%BC%9A%E7%BB%9D%E4%B8%8D%E5%9C%A8%E6%9E%84%E9%80%A0%E5%92%8C%E6%9E%90%E6%9E%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%B0%83%E7%94%A8%20virtual%20%E5%87%BD%E6%95%B0/" data-id="cl829mind002tssv5125r489c" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>为什么不要在构造函数中调用 virtual 函数？</p>
+<p>在 base class 构造期间，virtual 函数退化为 non-virtual 函数，因为在 base 类构造的时候，derived 类还没有被构造出来，此时是不可能调用到 derived 类的函数的</p>
+<p>在 derived class 对象的 base class 构造期间，对象的类型被编译器视为 base class，而不是 derived class。而且此时 dynamic_cast 和 typeid 都会将该对象的类型识别为 base class</p>
+<p>对于析构函数，有类似的解释：</p>
+<p>由于是先调用 derived class 的析构函数，再调用其 base class 的析构函数，此时对象的 derived 部分已经被销毁了，所以再调用虚函数也没有意义了</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE09%EF%BC%9A%E7%BB%9D%E4%B8%8D%E5%9C%A8%E6%9E%84%E9%80%A0%E5%92%8C%E6%9E%90%E6%9E%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E8%B0%83%E7%94%A8%20virtual%20%E5%87%BD%E6%95%B0/">
+    <time datetime="2022-09-12T01:41:00.681Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款11：在operator=中处理自我赋值" class="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款11：在operator=中处理自我赋值 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE11%EF%BC%9A%E5%9C%A8operator=%E4%B8%AD%E5%A4%84%E7%90%86%E8%87%AA%E6%88%91%E8%B5%8B%E5%80%BC/" data-id="cl829mind002ussv5czxx6kwo" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>自我赋值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bitmap</span> &#123;</span>...&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Bitmap* pb;</span><br><span class="line">&#125;;</span><br><span class="line">Widget w;</span><br><span class="line">...</span><br><span class="line">w = w;</span><br></pre></td></tr></table></figure>
+
+<p>下面是一个在自我赋值时不安全的 operator= 实现代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Widget&amp; Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">delete</span> pb; 					<span class="comment">//停止使用当前的 bitmap</span></span><br><span class="line">    pb = <span class="keyword">new</span> <span class="built_in">Bitmap</span>(*rhs.pb);	 <span class="comment">//使用 rhs&#x27;s bitmap 的副本</span></span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>operator= 函数的参数 rhs 和 *this 有可能是同一个对象，如果真是这样，那么 delete pb; 就会将这个对象销毁！后面的拷贝将是无意义的</p>
+<p>传统优化手段是加一个 if 判断：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">this</span> == &amp;rhs) <span class="keyword">return</span> *<span class="keyword">this</span>;  <span class="comment">//证同测试</span></span><br></pre></td></tr></table></figure>
+
+<p>但是这段代码还不具备异常安全性，假如<code>new Bitmap</code>导致了异常，Widget 最终会持有一个指针指向被删除的 Bitmap</p>
+<p>让 operator 具备异常安全性往往自动获得自我赋值安全性：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Widget&amp; Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    Bitmap* pOrig = pb;</span><br><span class="line">    pb = <span class="keyword">new</span> <span class="built_in">Bitmap</span>(*rhs.pb);	 <span class="comment">//使用 rhs&#x27;s bitmap 的副本</span></span><br><span class="line">    <span class="keyword">delete</span> pOrig;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在这段代码在<code>new Bitmap</code>爬出异常时仍能正常工作，同时也可兼容处理自我赋值（虽然效率不高）</p>
+<p>copy and swap 技术</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span>&#123;</span></span><br><span class="line">  	...</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(Widget&amp; rhs)</span></span>;		<span class="comment">// 交换*this和rhs的数据 </span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line">Widget&amp; Widget::<span class="keyword">operator</span>=(<span class="keyword">const</span> Widget&amp; rhs)</span><br><span class="line">&#123;</span><br><span class="line">    Widget <span class="built_in">temp</span>(rhs); <span class="comment">//不用 new 了，而是用一个栈上的局部对象</span></span><br><span class="line">    <span class="built_in">swap</span>(temp);		 <span class="comment">// 自我赋值时仍能工作</span></span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;    <span class="comment">// 局部变量 temp 自动销毁，</span></span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE11%EF%BC%9A%E5%9C%A8operator=%E4%B8%AD%E5%A4%84%E7%90%86%E8%87%AA%E6%88%91%E8%B5%8B%E5%80%BC/">
+    <time datetime="2022-09-12T01:41:00.681Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款 07：为多态基类声明 virtual 析构函数" class="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款 07：为多态基类声明 virtual 析构函数 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE%2007%EF%BC%9A%E4%B8%BA%E5%A4%9A%E6%80%81%E5%9F%BA%E7%B1%BB%E5%A3%B0%E6%98%8E%20virtual%20%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0/" data-id="cl829mind002vssv56u4o2w05" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span>&#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derived</span> :</span> Base &#123;&#125;;</span><br><span class="line">Base* b1 = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line"><span class="keyword">delete</span> b1;</span><br></pre></td></tr></table></figure>
+
+<p>当一个<code>Base</code>类指针指向一个<code>derived</code>类对象，那么要求<code>Base</code>类中的析构函数一定要被声明为<code>virtual</code>。否则会发生未定义行为，通常是对象的 derived 部分没有被销毁（只调用了基类的析构函数，而基类的<code>non-virtual</code>析构函数只负责销毁基类的成员）</p>
+<p>析构函数的运作方式是：最深层派生（most derived）类的析构函数会最先被调用，然后其每一个 base class 的析构函数会被调用。<u>编译器会在 derived class 的析构函数中创建一个对其直接基类的析构函数的调用动作。</u></p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE%2007%EF%BC%9A%E4%B8%BA%E5%A4%9A%E6%80%81%E5%9F%BA%E7%B1%BB%E5%A3%B0%E6%98%8E%20virtual%20%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0/">
+    <time datetime="2022-09-12T01:41:00.681Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款10：令 operator= 返回一个 reference to [星号]this" class="post-C++/《effective C++ 第三版》读书笔记/2. 构造、析构、赋值运算/条款10：令 operator= 返回一个 reference to [星号]this post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE10%EF%BC%9A%E4%BB%A4%20operator=%20%E8%BF%94%E5%9B%9E%E4%B8%80%E4%B8%AA%20reference%20to%20[%E6%98%9F%E5%8F%B7]this/" data-id="cl829mine002wssv5ek2o6gkv" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>为了实现“连锁赋值”，赋值操作符（或所有赋值相关运算）必须返回一个 reference 指向操作符的左侧实参</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">	Widget&amp; <span class="keyword">operator</span>=(cosnt Widget&amp; rhs)</span><br><span class="line">    &#123;</span><br><span class="line">        ...</span><br><span class="line">	   <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    </p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/2.%20%E6%9E%84%E9%80%A0%E3%80%81%E6%9E%90%E6%9E%84%E3%80%81%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97/%E6%9D%A1%E6%AC%BE10%EF%BC%9A%E4%BB%A4%20operator=%20%E8%BF%94%E5%9B%9E%E4%B8%80%E4%B8%AA%20reference%20to%20%5B%E6%98%9F%E5%8F%B7%5Dthis/">
+    <time datetime="2022-09-12T01:41:00.681Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/1. 让自己习惯C++/条款02：尽量以const，enum，inline替换#define" class="post-C++/《effective C++ 第三版》读书笔记/1. 让自己习惯C++/条款02：尽量以const，enum，inline替换#define post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/1.%20%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/%E6%9D%A1%E6%AC%BE02%EF%BC%9A%E5%B0%BD%E9%87%8F%E4%BB%A5const%EF%BC%8Cenum%EF%BC%8Cinline%E6%9B%BF%E6%8D%A2#define/" data-id="cl829min7002bssv55vuafzlg" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>尽量用编译器，而不用预处理器</p>
+<h4 id="1-define-、const-定义符号常量"><a href="#1-define-、const-定义符号常量" class="headerlink" title="1. #define 、const 定义符号常量"></a>1. #define 、const 定义符号常量</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ASPECT_RATIO 1.653</span></span><br></pre></td></tr></table></figure>
+
+<p><code>#define</code>在<u>预处理阶段</u>进行文本展开，编译器看不到<code>ASPECT_RATIO</code>符号名，如果涉及到<code>1.653</code>的代码在编译时报错，就会很难Debug，所以用<code>const</code>会比较好</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> ASPECT_RATIO = <span class="number">1.653</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>#define</code>在预处理阶段进行的，而<code>const</code>是一个运行时概念</li>
+<li><code>#define</code>定义的常量没有类型，没有类型安全检查 ，<code>const</code>的常量带类型，要在编译时进行类型检查</li>
+<li><code>#define</code>是直接替换，没有分配内存，存储于程序代码段中。而<code>const</code>需要进行内存分配，存储于程序数据段中</li>
+<li><code>const</code>可以将常量限制在作用域内，例如class专属常量，而<code>#define</code>不重视作用域，不能提供封装性</li>
+</ul>
+<h4 id="2-define、inline-定义函数"><a href="#2-define、inline-定义函数" class="headerlink" title="2. #define、inline 定义函数"></a>2. #define、inline 定义函数</h4><ul>
+<li>#define宏函数容易导致歧义，会发生不可预计的行为，要用inline内联函数代替宏函数，就可以实现可预计的行为和类型安全（template inline），还可以设定作用域和访问规则</li>
+<li>inline只是对内联的建议，编译器不一定真的实现内联</li>
+</ul>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/1.%20%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/%E6%9D%A1%E6%AC%BE02%EF%BC%9A%E5%B0%BD%E9%87%8F%E4%BB%A5const%EF%BC%8Cenum%EF%BC%8Cinline%E6%9B%BF%E6%8D%A2#define/">
+    <time datetime="2022-09-12T01:41:00.680Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/1. 让自己习惯C++/条款03：尽可能使用const" class="post-C++/《effective C++ 第三版》读书笔记/1. 让自己习惯C++/条款03：尽可能使用const post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/1.%20%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/%E6%9D%A1%E6%AC%BE03%EF%BC%9A%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E7%94%A8const/" data-id="cl829min7002cssv5aynthm43" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <p>const是一个语义约束，由编译器强制实现</p>
+<h4 id="1-指针与const"><a href="#1-指针与const" class="headerlink" title="1. 指针与const"></a>1. 指针与const</h4><p>涉及到指针时，注意区分const是修饰指针本身还是指针所指之物</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span>* p = greeting;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* p =greeting;    <span class="comment">// 不可修改 *p</span></span><br><span class="line"><span class="keyword">char</span>* <span class="keyword">const</span> p = greeting;   <span class="comment">// 不可修改 p</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-STL迭代器与const"><a href="#2-STL迭代器与const" class="headerlink" title="2. STL迭代器与const"></a>2. STL迭代器与const</h4><p>声明一个迭代器为<code>const</code>就像声明一个指针为<code>const（T* const）</code>，表示迭代器不能指向不同的东西，但它所指之物本身可以修改，而<code>const_iterator</code>约束了所指之物本身不能被修改。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> std::vector&lt;<span class="keyword">int</span>&gt;::iterator iter = vec.<span class="built_in">begin</span>();</span><br><span class="line">std::vector&lt;<span class="keyword">int</span>&gt;::const_iterator cIter = vec.<span class="built_in">begin</span>();</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-const成员函数"><a href="#3-const成员函数" class="headerlink" title="3. const成员函数"></a>3. const成员函数</h4><p>在成员函数声明语句末端添加<code>const</code>关键字，意味着该函数不能修改对象内任何<code>non-static</code>成员变量（可以修改static）。const对象不能被修改， 所以const对象只能调用const成员函数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">T</span>&#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">fun1</span><span class="params">()</span> <span class="keyword">const</span></span>;   <span class="comment">//const成员函数</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>两个成员函数如果只是常量性不同，可以被重载</p>
+</blockquote>
+<h5 id="3-1-bitwise-constness-和-logical-constness"><a href="#3-1-bitwise-constness-和-logical-constness" class="headerlink" title="3.1 bitwise constness 和 logical constness"></a>3.1 bitwise constness 和 logical constness</h5><p><code>bitwise</code>常量性是编译器规定的，表示对象内部的任何一个字节都不被修改，但这种常量性无法保证成员指针指向的data不被修改。</p>
+<p><code>logical</code>常量性比较宽松，主张一个const成员函数可以修改它所处理的对象内的某些bits，但只有在客户端侦测不出的情况下才行。具体实现要用<code>mutable</code>关键字，指出那些无关紧要的变量，这些变量即使在const成员函数内也可以被修改。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CTextBlock</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">	<span class="function">std::<span class="keyword">size_t</span> <span class="title">length</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* pText;</span><br><span class="line">    <span class="keyword">mutable</span> std::<span class="keyword">size_t</span> textLength; <span class="comment">// 可被const函数修改</span></span><br><span class="line">    <span class="keyword">mutable</span> <span class="keyword">bool</span> lengthIsValid;		<span class="comment">// 可被const函数修改</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">std::<span class="keyword">size_t</span> <span class="title">CTextBlock::length</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 可以对 textLength 和 lengthIsValid 进行修改</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-2-用const成员函数实现non-const成员函数"><a href="#3-2-用const成员函数实现non-const成员函数" class="headerlink" title="3.2 用const成员函数实现non-const成员函数"></a>3.2 用const成员函数实现non-const成员函数</h5><p>为了避免代码重复，有时需要这么做，方法是使用转型（casting）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TextBlock</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ...</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[](std::<span class="keyword">size_t</span> position) <span class="keyword">const</span> </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> text[position];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span>&amp; <span class="keyword">operator</span>[](std::<span class="keyword">size_t</span> position)</span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="keyword">return</span> </span><br><span class="line">            <span class="keyword">const_cast</span>&lt;<span class="keyword">char</span>&amp;&gt;(</span><br><span class="line">            <span class="keyword">static_cast</span>&lt;<span class="keyword">const</span> TextBlock&amp;&gt;(*<span class="keyword">this</span>)[position]</span><br><span class="line">                                );</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* pText;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里有两次转型，第一次用来为 *this 添加 const，所以调用 operator[] 时可以调用其 const 版本，然后第二次转型从 const operator[] 的返回值中移除 const</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/1.%20%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/%E6%9D%A1%E6%AC%BE03%EF%BC%9A%E5%B0%BD%E5%8F%AF%E8%83%BD%E4%BD%BF%E7%94%A8const/">
+    <time datetime="2022-09-12T01:41:00.680Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+    <article id="post-C++/《effective C++ 第三版》读书笔记/1. 让自己习惯C++/条款04：确定对象被使用前已先被初始化" class="post-C++/《effective C++ 第三版》读书笔记/1. 让自己习惯C++/条款04：确定对象被使用前已先被初始化 post type-post status-publish format-standard hentry">
+    <!---->
+
+      <header class="entry-header">
+        
+        <div class="comments-link">
+            
+            <a href="javascript:void(0);" data-url="http://example.com/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/1.%20%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/%E6%9D%A1%E6%AC%BE04%EF%BC%9A%E7%A1%AE%E5%AE%9A%E5%AF%B9%E8%B1%A1%E8%A2%AB%E4%BD%BF%E7%94%A8%E5%89%8D%E5%B7%B2%E5%85%88%E8%A2%AB%E5%88%9D%E5%A7%8B%E5%8C%96/" data-id="cl829min8002fssv5fgye0e9i" class="leave-reply bdsharebuttonbox" data-cmd="more">Share</a>
+        </div><!-- .comments-link -->
+      </header><!-- .entry-header -->
+
+    <div class="entry-content">
+      
+        <h4 id="1-区分初始化（initialization）与赋值（assignment）"><a href="#1-区分初始化（initialization）与赋值（assignment）" class="headerlink" title="1. 区分初始化（initialization）与赋值（assignment）"></a>1. 区分初始化（initialization）与赋值（assignment）</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PhoneNumber</span> &#123;</span>...&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ABEntry</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">ABEntry</span>(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> std::string&amp; address, <span class="keyword">const</span> std::list&lt;PhoneNumber&gt;&amp; phones);</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string theName;</span><br><span class="line">    std::string theAddress;</span><br><span class="line">    std::list&lt;PhoneNumber&gt; thePhones;</span><br><span class="line">    <span class="keyword">int</span> numTimesConsulted;</span><br><span class="line">&#125;;</span><br><span class="line">ABEntry::<span class="built_in">ABEntry</span>(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> std::string&amp; address, <span class="keyword">const</span> std::list&lt;PhoneNumber&gt;&amp; phones)&#123;</span><br><span class="line">	theName = name;  	 	<span class="comment">//构造函数体内的对对成员对象的操作都是赋值，而非初始化</span></span><br><span class="line">    theAddress = address; </span><br><span class="line">    thePhones = phones;</span><br><span class="line">    numTimesConsulted = <span class="number">0</span>;  <span class="comment">//对于内置类型，不保证会有一个提前初始化动作</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>C++规定，对象的成员变量的初始化动作发生在进入构造函数本体之前。上述构造函数体中的形如<code>theName = name;</code>的语句都是赋值，初始化动作发生在进入构造函数本体之前。</p>
+<p>在进入构造函数体之前，类成员对象的<u>默认构造函数</u>会被调用，以进行初始化动作。这里之所以是<u>默认构造函数</u>被调用，是因为这些对象在初始化时没有参数传入，自然就会调用默认构造函数了。而用初始化列表（member initialization list）可以在其初始化时引入参数，代替默认行为。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ABEntry::<span class="built_in">ABEntry</span>(<span class="keyword">const</span> std::string&amp; name, <span class="keyword">const</span> std::string&amp; address, <span class="keyword">const</span> std::list&lt;PhoneNumber&gt;&amp; phones)</span><br><span class="line">:<span class="built_in">theName</span>(name),</span><br><span class="line"> <span class="built_in">theAddress</span>(address),</span><br><span class="line"> <span class="built_in">thePhones</span>(phones),</span><br><span class="line"> <span class="built_in">numTimesConsulted</span>(<span class="number">0</span>)</span><br><span class="line">&#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用初始化列表，只会有<u>一次</u>类成员对象的<u>拷贝构造函数</u>被调用，传入copy构造函数的参数，以进行初始化。而之前在构造函数体内进行赋值的操作会有初始化、赋值两个动作：</p>
+<ol>
+<li>默认构造函数初始化</li>
+<li>赋值运算符重载函数</li>
+</ol>
+<p>所以，用初始化列表往往更高效</p>
+<p>在某些情况下， 必须使用初始化，不能用赋值。例如类成员是<code>const</code>或<code>引用</code>，这些类型不能被赋值，只能被初始化，所以它们不能放在构造函数体内，只能用初始化列表。</p>
+<blockquote>
+<p>注意，成员变量的初始化顺序只跟它们的声明顺序有关，跟它们在初始化列表中的顺序无关</p>
+</blockquote>
+<h4 id="2-”不同编译单元内定义之non-local-static-对象“的初始化次序"><a href="#2-”不同编译单元内定义之non-local-static-对象“的初始化次序" class="headerlink" title="2. ”不同编译单元内定义之non-local static 对象“的初始化次序"></a>2. ”不同编译单元内定义之non-local static 对象“的初始化次序</h4><p>static对象的寿命从被构造出来直到程序结束为止</p>
+<h5 id="2-1-non-local-static"><a href="#2-1-non-local-static" class="headerlink" title="2.1 non-local static"></a>2.1 non-local static</h5><p>所谓<code>non-local static</code>对象，就是<u>在函数内</u>的<code>static</code>对象，其他对象都被称为<code>non-local static</code>对象</p>
+<h5 id="2-2-编译单元"><a href="#2-2-编译单元" class="headerlink" title="2.2 编译单元"></a>2.2 编译单元</h5><p>所谓编译单元（translation unit）是指产出单一目标文件（single object file）的那些源码。基本上，它是单一源码文件加上其所含入的头文件（#iinclude files）</p>
+<h5 id="2-3-初始化次序问题"><a href="#2-3-初始化次序问题" class="headerlink" title="2.3 初始化次序问题"></a>2.3 初始化次序问题</h5><p>当两个及以上的编译单元内都存在non-local static对象，这些static对象可以互相看见</p>
+<p>关键问题是：如果某个编译单元内的non-local static对象的初始化动作使用了另一编译单元内的某个non-local static对象，它所用到的这个对象可能还没有被初始化。<u>因为C++对定义于不同编译单元内的non-local static对象的初始化次序并无明确定义</u></p>
+<h5 id="2-4-解决方案"><a href="#2-4-解决方案" class="headerlink" title="2.4 解决方案"></a>2.4 解决方案</h5><p>将每个non-local static对象搬到自己的专属函数内，这些函数返回一个引用reference指向它所含的对象，然后用户调用这些函数，而不直接使用这些对象。本质上就是用local static对象替换non-local static对象。</p>
+<p><strong><u><em>C++保证，函数内的local static对象会在”该函数被调用期间“”首次遇到该对象定义式“时被初始化</em></u></strong></p>
+<p>所以，用户想使用那个对象，而调用函数时， 可以保证函数返回的reference是一个已经被初始化过了的对象。而且，仅当该函数被调用时，其中的local static对象才会进行构造初始化，所以如果从未调用该函数，就不会有构造、析构成本。</p>
+<blockquote>
+<p>内含static对象的函数在多线程环境下带有不确定性</p>
+</blockquote>
+<h5 id="2-5-应用场景：单例模式"><a href="#2-5-应用场景：单例模式" class="headerlink" title="2.5 应用场景：单例模式"></a>2.5 应用场景：单例模式</h5><p>先来看看C++单例模式的经典实现（Meyers’ Singleton）：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> Singleton&amp; <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">static</span> Singleton inst;</span><br><span class="line">        <span class="keyword">return</span> inst;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">Singleton</span>(<span class="keyword">const</span> Singleton&amp;) = <span class="keyword">delete</span>; <span class="comment">//不准使用拷贝构造函数【使用delete也防止它被编译器自动生成？】</span></span><br><span class="line">    Singleton&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> Singleton&amp;) = <span class="keyword">delete</span>;</span><br><span class="line">    <span class="comment">//其他数据函数</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">Singleton</span>() &#123;...&#125;</span><br><span class="line">    <span class="comment">//其他数据函数</span></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：C++11已经规定static变量是线程安全的了，所以无需我们自己写加锁保护的代码，编译器可以帮我们做到。所以C++单例模式不需要考虑<code>double check</code>或<code>volatile</code>了</p>
+</blockquote>
+<p>将静态单例的定义放在函数内，形成局部静态变量，保证在用户第一次调用<code>getInstance()</code>时，<code>inst</code>才会被构造出来，所以用户不用担想获得单例时，单例还没有被初始化的困境，解决了“不同文件里的static变量的初始化顺序问题”。同时，如果没有调用<code>getInstance()</code>，就不会产生构造<code>inst</code>的开销。</p>
+
+      
+    </div><!-- .entry-content -->
+
+    <footer class="entry-meta">
+    <a href="/2022/09/12/C++/%E3%80%8Aeffective%20C++%20%E7%AC%AC%E4%B8%89%E7%89%88%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/1.%20%E8%AE%A9%E8%87%AA%E5%B7%B1%E4%B9%A0%E6%83%AFC++/%E6%9D%A1%E6%AC%BE04%EF%BC%9A%E7%A1%AE%E5%AE%9A%E5%AF%B9%E8%B1%A1%E8%A2%AB%E4%BD%BF%E7%94%A8%E5%89%8D%E5%B7%B2%E5%85%88%E8%A2%AB%E5%88%9D%E5%A7%8B%E5%8C%96/">
+    <time datetime="2022-09-12T01:41:00.680Z" class="entry-date">
+        2022-09-12
+    </time>
+</a>
+    
+    
+    </footer>
+</article>
+
+
+
+
+
+
+  
+  
+    <nav id="pagination">
+      <nav id="page-nav">
+        <a class="extend prev" rel="prev" href="/page/5/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/7/">Next &amp;raquo;</a>
+      </nav>
+    </nav>
+  
+
+</div></div>
+        <div id="secondary" class="widget-area" role="complementary">
+  
+    <aside id="search" class="widget widget_search"><form role="search" method="get" accept-charset="utf-8" id="searchform" class="searchform" action="//google.com/search">
+    <div>
+        <input type="text" value="" name="s" id="s" />
+        <input type="submit" id="searchsubmit" value="搜索" />
+    </div>
+</form></aside>
+  
+    
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-content">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%88%91%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E8%8F%9C/">我为什么这么菜~~</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget-content">
+      <ul>
+        
+          <li>
+            <a href="/2022/09/12/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">第一篇博客</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E8%93%9D%E5%9B%BE%E4%B8%8EC++%E4%BA%A4%E4%BA%92/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E7%AB%AF%E5%8F%A3/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E3%80%81/%E9%9A%8F%E6%9C%BA%E6%89%93%E4%B9%B1%E4%B8%80%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2022/09/12/%E7%BD%91%E7%BB%9C/TCP%E5%92%8CUDP%E7%9A%84%E5%8C%BA%E5%88%AB/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-content">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C-C/" rel="tag">C&#x2F;C++</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Grammar/" rel="tag">Grammar</a><span class="tag-list-count">3</span></li></ul>
+    </div>
+  </aside>
+
+  
+    
+  <aside class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-content tagcloud">
+      <a href="/tags/C-C/" style="font-size: 10px;">C/C++</a> <a href="/tags/Grammar/" style="font-size: 20px;">Grammar</a>
+    </div>
+  </aside>
+
+  
+</div>
+      </div>
+      <footer id="colophon" role="contentinfo">
+    <p>&copy; 2022 pano
+    All rights reserved.</p>
+    <p>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></p>
+</footer>
+    <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/js/share.js'];</script>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+<script src="/js/navigation.js"></script>
+
+<div id="bg"></div>
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
