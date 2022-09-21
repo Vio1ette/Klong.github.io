@@ -148,6 +148,7 @@ hgroup,
 nav,
 section {
 	display: block;
+	font-size: 1%;
 }
 audio,
 canvas,
@@ -759,16 +760,15 @@ section[role="banner"] {
 	margin-left: 2.571428571rem;
 }
 .widget-area .widget a {
-	color: rgb(0, 0, 0); /* Widget Link Normal*/
+	color: rgb(0, 0, 0); /* Widget Link Normal */
 }
 .widget-area .widget a:hover {
 	color: rgb(81, 165, 168); /* Widget Link Hover*/
 }
 
-}
 .widget-area #s {
 	width: 70.66666666666%; /* define a width to avoid dropping a wider submit button */
-}
+} 
 
 /* Footer */
 footer[role="contentinfo"] {
@@ -777,8 +777,8 @@ footer[role="contentinfo"] {
 	font-size: 12px;
 	font-size: 0.857142857rem;
 	line-height: 2;
-	max-width: 960px;
-	max-width: 68.571428571rem;
+	max-width: 1200px;
+	/* max-width: 68.571428571rem; */
 	margin-top: 24px;
 	margin-top: 1.714285714rem;
 	margin-left: auto;
@@ -1673,13 +1673,14 @@ img#wpstats {
 	}
 	.site {
 		margin: 0 auto;
-		max-width: 960px;
-		max-width: 68.571428571rem;
+		max-width: 1200px;
+		/* max-width: 68.571428571rem; */
 		overflow: hidden;
 	}
 	.site-content {
 		float: left;
 		width: 65.104166667%;
+		/* width: 100%; */
 	}
 	body.template-front-page .site-content,
 	body.single-attachment .site-content,
